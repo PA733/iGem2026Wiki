@@ -1,48 +1,80 @@
-<main class="home-main" [attr.id]="isSearchPage || isArticlePage ? 'home-main-content' : 'main_content'" aria-label="Main Content" tabindex="-1">
+<main class="home-main" [attr.id]="isSearchPage || isArticlePage ? 'home-main-content' : 'main_content'" aria-label="LUT-CHINA home" tabindex="-1">
   <header class="hero">
     <div class="hero-copy">
       <div class="hero-stack">
         <div class="hero-title">
-          <h1 tabindex="-1">Material Design</h1>
-          <p>Material Design 3 is Google’s open-source design system for building beautiful, usable products.</p>
+          <h1 tabindex="-1">LUT-<wbr>CHINA</h1>
+          <p>Functional dressing for diabetic foot ulcers</p>
+          <p class="hero-mission">Engineering molecules for repair.<br>Exploring new possibilities for chronic wounds.</p>
         </div>
-          <a class="get-started" href="https://m3.material.io/get-started" aria-label="Get started">Get started</a>
+        <a class="get-started" href="/project">Explore the project</a>
       </div>
     </div>
-    <div class="hero-media">
-      <video #heroVideo autoplay muted loop playsinline preload="auto" aria-label="Material Design product montage">
-        <source src="assets/hero-homepage-2026.mp4" type="video/mp4" />
-      </video>
-      <button
-        class="video-control"
-        type="button"
-        [attr.aria-label]="isVideoPaused ? 'Play Video' : 'Pause Video'"
-        [title]="isVideoPaused ? 'Play video' : 'Pause video'"
-        (click)="toggleVideo()"
-      >
-        <span class="symbol">{{ isVideoPaused ? 'play_arrow' : 'pause' }}</span>
+    <div class="hero-media dressing-scene" [class.scene-paused]="isVideoPaused">
+      <svg class="dressing-illustration" viewBox="0 0 660 544" role="img" aria-labelledby="dressing-title dressing-description">
+        <title id="dressing-title">Four layers. One purpose.</title>
+        <desc id="dressing-description">An animated exploded view of a four-layer functional dressing: breathable protection, fluid absorption, hydrogel delivery and gentle wound contact.</desc>
+        <defs>
+          <linearGradient id="hero-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe2cb"/><stop offset="1" stop-color="#f1dded"/></linearGradient>
+          <linearGradient id="hero-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9b0ec"/><stop offset=".55" stop-color="#dfdcff"/><stop offset="1" stop-color="#efecff"/></linearGradient>
+          <linearGradient id="hero-absorb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d1eeb4"/><stop offset="1" stop-color="#e7f4d4"/></linearGradient>
+          <linearGradient id="hero-gel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb791"/><stop offset="1" stop-color="#ffdfb2"/></linearGradient>
+          <linearGradient id="hero-contact" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8db6f"/><stop offset="1" stop-color="#fff0b8"/></linearGradient>
+          <pattern id="hero-mesh" patternUnits="userSpaceOnUse" width="20" height="16" patternTransform="matrix(1 .44 -1 .44 310 -15)"><circle cx="10" cy="8" r="3.5" fill="#bf9743" fill-opacity=".5"/></pattern>
+          <filter id="hero-shadow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="14"/></filter>
+        </defs>
+        <g class="scene-orbit" fill="none" stroke="#92728d" stroke-width="1" opacity=".38">
+          <ellipse cx="330" cy="270" rx="269" ry="194" transform="rotate(-23 330 270)"/>
+          <ellipse cx="330" cy="270" rx="250" ry="187" transform="rotate(25 330 270)" stroke-dasharray="2 8"/>
+        </g>
+        <ellipse cx="333" cy="464" rx="167" ry="22" fill="#86655b" opacity=".2" filter="url(#hero-shadow)"/>
+        <g class="scene-layer scene-layer-1">
+          <path d="M163 375 309 309Q330 299 350 309L501 375Q518 383 501 394L350 463Q331 472 312 463L163 396Q145 386 163 375Z" fill="#dab756"/>
+          <path d="M163 363 309 297Q330 287 350 297L501 363Q518 373 501 382L350 451Q331 460 312 451L163 384Q145 374 163 363Z" fill="url(#hero-contact)"/>
+          <path d="M163 363 309 297Q330 287 350 297L501 363Q518 373 501 382L350 451Q331 460 312 451L163 384Q145 374 163 363Z" fill="url(#hero-mesh)"/>
+        </g>
+        <g class="scene-layer scene-layer-2">
+          <path d="M163 303 309 237Q330 227 350 237L501 303Q518 313 501 322L350 391Q331 400 312 391L163 324Q145 314 163 303Z" fill="#d58c76"/>
+          <path d="M163 290 309 224Q330 214 350 224L501 290Q518 300 501 309L350 378Q331 387 312 378L163 311Q145 301 163 290Z" fill="url(#hero-gel)" stroke="#fff0d8" stroke-opacity=".8"/>
+          <g fill="#fa937b" opacity=".6"><ellipse cx="257" cy="286" rx="25" ry="12"/><ellipse cx="329" cy="255" rx="25" ry="12"/><ellipse cx="329" cy="318" rx="25" ry="12"/><ellipse cx="405" cy="284" rx="25" ry="12"/><ellipse cx="399" cy="340" rx="17" ry="8"/><ellipse cx="260" cy="339" rx="17" ry="8"/></g>
+          <g fill="#fff2c6"><circle cx="329" cy="254" r="5"/><circle cx="257" cy="285" r="5"/><circle cx="329" cy="317" r="5"/><circle cx="405" cy="283" r="5"/></g>
+        </g>
+        <g class="scene-layer scene-layer-3">
+          <path d="M163 226 309 160Q330 150 350 160L501 226Q518 236 501 245L350 314Q331 323 312 314L163 247Q145 237 163 226Z" fill="#91b894"/>
+          <path d="M163 210 309 144Q330 134 350 144L501 210Q518 220 501 229L350 298Q331 307 312 298L163 231Q145 221 163 210Z" fill="url(#hero-absorb)" stroke="#f3ffe9"/>
+          <g fill="none" stroke="#8fb58d" stroke-width="2" opacity=".48"><path d="m188 220 142-64 145 64-145 65Z"/><path d="m220 220 110-49 112 49-112 50Z"/><path d="m252 220 78-35 79 35-79 36Z"/><path d="m283 220 47-21 47 21-47 21Z"/></g>
+        </g>
+        <g class="scene-layer scene-layer-4">
+          <path d="M163 145 309 79Q330 69 350 79L501 145Q518 155 501 164L350 233Q331 242 312 233L163 166Q145 156 163 145Z" fill="#a69dcd"/>
+          <path d="M163 139 309 73Q330 63 350 73L501 139Q518 149 501 158L350 227Q331 236 312 227L163 160Q145 150 163 139Z" fill="url(#hero-top)" stroke="#f7f5ff" stroke-width="1.5"/>
+          <path d="m191 149 124-56q15-7 30 0l126 56-126 58q-15 7-30 0Z" fill="none" stroke="#f6f4ff" stroke-width="1.5" opacity=".65"/>
+          <path d="M282 128q15-18 33 0t34 0t34 0M282 147q15-18 33 0t34 0t34 0M282 166q15-18 33 0t34 0t34 0" fill="none" stroke="#8d80b1" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+        </g>
+        <g class="scene-molecule scene-molecule-a" stroke="#7d618c" stroke-width="2.5">
+          <path d="m87 149 26-15 26 15v30l-26 15-26-15Zm52 30 22 13" fill="none"/>
+          <circle cx="87" cy="149" r="8" fill="#eee5ff"/><circle cx="113" cy="134" r="6" fill="#b49bd4"/><circle cx="139" cy="179" r="8" fill="#fff1c8"/><circle cx="162" cy="192" r="5" fill="#b49bd4"/>
+        </g>
+        <g class="scene-molecule scene-molecule-b" stroke="#997f40" stroke-width="2.5">
+          <path d="m526 330 25-15 25 15v29l-25 15-25-15Zm25-15v-23" fill="none"/>
+          <circle cx="551" cy="292" r="8" fill="#fff3be"/><circle cx="526" cy="359" r="6" fill="#e6be58"/><circle cx="576" cy="330" r="8" fill="#fff3be"/>
+        </g>
+        <g class="scene-spark" fill="#7b627f"><path d="m521 91 3 11 11 3-11 3-3 11-3-11-11-3 11-3Z"/><path d="m124 386 2 8 8 2-8 2-2 8-2-8-8-2 8-2Z"/></g>
+      </svg>
+      <span class="scene-caption scene-caption-top" aria-hidden="true">ENGINEERED FOR CARE</span>
+      <span class="scene-caption scene-caption-bottom" aria-hidden="true">FOUR LAYERS. ONE PURPOSE.</span>
+      <button class="video-control" type="button" [attr.aria-label]="isVideoPaused ? 'Play dressing animation' : 'Pause dressing animation'" [title]="animationsPaused ? 'Animations are paused in settings' : (isVideoPaused ? 'Play animation' : 'Pause animation')" [attr.aria-pressed]="isVideoPaused" [disabled]="animationsPaused" (click)="toggleVideo()">
+        <span class="symbol" aria-hidden="true">{{ isVideoPaused ? 'play_arrow' : 'pause' }}</span>
       </button>
     </div>
   </header>
 
   <article class="home-content">
     <section class="content-section io-section" aria-labelledby="io-heading">
-      <h2 id="io-heading">Material at Google I/O 2026</h2>
+      <h2 id="io-heading">A new approach to healing</h2>
       <div class="card-grid feature-grid">
-        @for (card of ioCards; track card.title; let index = $index) {
-          <a
-            class="material-card"
-            [class.feature-card]="card.size === 'feature'"
-            [class.large-card]="card.size === 'large'"
-            [class.first-feature]="index === 0"
-            [href]="card.href"
-            [attr.aria-label]="card.title"
-            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
-            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
-          >
-            @if (card.image) {
-              <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
-            }
+        @for (card of ioCards; track card.title) {
+          <a class="material-card" [class.feature-card]="card.size === 'feature'" [class.large-card]="card.size === 'large'" [href]="card.href">
+            <div class="card-media" aria-hidden="true"><app-home-art [kind]="card.art ?? ''" /></div>
             <div class="card-copy">
               @if (card.date) { <span class="card-date">{{ card.date }}</span> }
               <h3>{{ card.title }}</h3>
@@ -54,97 +86,47 @@
     </section>
 
     <section class="content-section expressive-intro" aria-labelledby="expressive-heading">
-      <h2 id="expressive-heading">M3 Expressive: Design with emotion</h2>
-      <p class="section-intro">
-        Build more usable and engaging products with emotion-driven UX. M3 Expressive adds vibrant
-        <a href="https://m3.material.io/styles/color/system/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">colors</a>, intuitive
-        <a href="https://m3.material.io/styles/motion/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">motion</a>, adaptive
-        <a href="https://m3.material.io/components?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">components</a>, flexible
-        <a href="https://m3.material.io/styles/typography/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">typography</a>, and contrasting
-        <a href="https://m3.material.io/styles/shape/overview-principles?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">shapes</a>.
-      </p>
-      <div class="card-grid mixed-grid">
+      <h2 id="expressive-heading">Four layers. One purpose.</h2>
+      <p class="section-intro">From wound contact to outer protection, each layer has a role in delivery, absorption and breathability. <a href="/project/design">Explore the four-layer design</a> and the interactions we plan to test.</p>
+      <div class="card-grid two-column-grid layer-grid">
         @for (card of expressiveIntroCards; track card.title) {
-          <a
-            class="material-card"
-            [class.large-card]="card.size === 'large'"
-            [class.small-card]="card.size === 'small'"
-            [href]="card.href"
-            [attr.aria-label]="card.title"
-            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
-            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
-          >
-            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
-            <div class="card-copy">
-              <h3>{{ card.title }}</h3>
-              <p>{{ card.description }}</p>
-            </div>
+          <a class="material-card large-card" [href]="card.href">
+            <div class="card-media" aria-hidden="true"><app-home-art [kind]="card.art ?? ''" /></div>
+            <div class="card-copy"><h3>{{ card.title }}</h3><p>{{ card.description }}</p></div>
           </a>
         }
       </div>
     </section>
 
     <section class="content-section" aria-labelledby="components-heading">
-      <h2 id="components-heading">Expressive components</h2>
-      <div class="card-grid mixed-grid component-grid">
+      <h2 id="components-heading">From design to evidence</h2>
+      <div class="card-grid two-column-grid">
         @for (card of componentCards; track card.title) {
-          <a
-            class="material-card"
-            [class.large-card]="card.size === 'large'"
-            [class.compact-card]="card.size === 'compact'"
-            [href]="card.href"
-            [attr.aria-label]="card.title"
-            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
-            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
-          >
-            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
-            <div class="card-copy">
-              <h3>{{ card.title }}</h3>
-              <p>{{ card.description }}</p>
-            </div>
+          <a class="material-card large-card" [href]="card.href">
+            <div class="card-media" aria-hidden="true"><app-home-art [kind]="card.art ?? ''" /></div>
+            <div class="card-copy"><h3>{{ card.title }}</h3><p>{{ card.description }}</p></div>
           </a>
         }
       </div>
     </section>
 
     <section class="content-section" aria-labelledby="apply-heading">
-      <h2 id="apply-heading">How to apply M3 Expressive</h2>
-      <div class="card-grid two-column-grid">
+      <h2 id="apply-heading">Science with people</h2>
+      <div class="card-grid mixed-grid">
         @for (card of applyCards; track card.title) {
-          <a class="material-card large-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
-            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
-            <div class="card-copy">
-              <h3>{{ card.title }}</h3>
-              <p>{{ card.description }}</p>
-            </div>
-          </a>
-        }
-      </div>
-    </section>
-
-    <section class="content-section" aria-labelledby="latest-heading">
-      <h2 id="latest-heading">Latest in Material &amp; Google Design</h2>
-      <div class="card-grid two-column-grid">
-        @for (card of latestCards; track card.title) {
-          <a class="material-card large-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
-            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
-            <div class="card-copy">
-              <h3>{{ card.title }}</h3>
-              <p>{{ card.description }}</p>
-            </div>
+          <a class="material-card small-card" [href]="card.href">
+            <div class="card-media" aria-hidden="true"><app-home-art [kind]="card.art ?? ''" /></div>
+            <div class="card-copy"><h3>{{ card.title }}</h3><p>{{ card.description }}</p></div>
           </a>
         }
       </div>
     </section>
 
     <section class="content-section next-section" aria-labelledby="next-heading">
-      <h2 id="next-heading">Next steps</h2>
+      <h2 id="next-heading">Keep exploring</h2>
       <div class="next-grid">
         @for (card of nextCards; track card.title) {
-          <a class="next-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
-            <h3>{{ card.title }}</h3>
-            <p>{{ card.description }}</p>
-          </a>
+          <a class="next-card" [href]="card.href"><h3>{{ card.title }}<span class="symbol next-arrow" aria-hidden="true">arrow_outward</span></h3><p>{{ card.description }}</p></a>
         }
       </div>
     </section>

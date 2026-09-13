@@ -1,46 +1,22 @@
-<div
-  class="app"
-  [class.dark]="isDark"
-  [class.motion-paused]="animationsPaused"
-  [class.search-page]="isSearchPage"
-  [class.article-page]="isArticlePage"
-  [class.article-principles]="articleKey === 'principles'"
-  [class.article-assistive]="articleKey === 'assistive-technology'"
-  [class.search-results-active]="isSearchPage && hasSearchResults"
->
-  <a
-    class="skip-link"
-    [href]="isSearchPage ? '/search.html#main_content' : '/#main_content'"
-    aria-label="skip to main content"
-    (click)="skipToTarget($event)"
-  >Skip to main content</a>
-
-  <app-navigation
-    [isSearchPage]="isSearchPage"
-    [isArticlePage]="isArticlePage"
-    [isDark]="isDark"
-    [animationsPaused]="animationsPaused"
-    (searchRequested)="openSearch($event)"
-    (homeRequested)="scrollHome($event)"
-    (themeToggled)="toggleTheme()"
-    (animationsToggled)="toggleAnimations()"
-  />
-
+<div class="app" [class.dark]="isDark" [class.motion-paused]="animationsPaused" [class.search-page]="isSearchPage" [class.search-results-active]="isSearchPage && hasSearchResults" [class.wiki-reader]="!!article" [class.category-page]="!!category" (click)="onInternalLink($event)">
+  <a class="skip-link" href="#main_content" (click)="skipToTarget($event)">Skip to main content</a>
+  <app-navigation [isSearchPage]="isSearchPage" [isArticlePage]="!!article" [activeCategory]="activeCategory" [isDark]="isDark" [animationsPaused]="animationsPaused" (searchRequested)="openSearch($event)" (homeRequested)="scrollHome($event)" (themeToggled)="toggleTheme()" (animationsToggled)="toggleAnimations()" />
   <div #pageContent class="page-content page-content-height" (scroll)="onPageContentScroll()">
     <div class="page-body">
-      <app-search-page [isSearchPage]="isSearchPage" (resultsChanged)="hasSearchResults = $event" />
-      @if (articleKey; as key) {
-        <app-foundation-article
-          [articleKey]="key"
-          [scrollContainer]="pageContent"
-          (articleRequested)="openArticle($event.event, $event.path)"
-        />
-      }
-      <app-home-page
-        [isSearchPage]="isSearchPage"
-        [isArticlePage]="isArticlePage"
-        [animationsPaused]="animationsPaused"
-      />
+        @if (isSearchPage) {
+          <app-search-page [isSearchPage]="true" (resultsChanged)="hasSearchResults = $event" />
+        } @else if (article) {
+          <app-wiki-article [article]="article" [scrollContainer]="pageContent" [relatedArticles]="relatedArticles" [animationsPaused]="animationsPaused" />
+        } @else if (category) {
+          <app-category-page [category]="category" [articles]="relatedArticles" [scrollContainer]="pageContent" [animationsPaused]="animationsPaused" />
+        } @else if (notFound) {
+          <main id="main_content" class="not-found" tabindex="-1">
+            <span class="symbol" aria-hidden="true">explore_off</span><p>404</p><h1>Page not found</h1><p>This page could not be found. Continue exploring the LUT-CHINA project.</p>
+            <a class="get-started" href="/project">Explore the project</a>
+          </main>
+        } @else {
+          <app-home-page [isSearchPage]="false" [isArticlePage]="false" [animationsPaused]="animationsPaused" />
+        }
       <app-footer (homeRequested)="scrollHome($event)" />
     </div>
   </div>

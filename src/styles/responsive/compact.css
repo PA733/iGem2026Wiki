@@ -173,7 +173,8 @@
   }
 
   .mobile-brand > span:last-child {
-    display: none;
+    display: inline;
+    margin-left: 12px;
   }
 }
 

@@ -1,181 +1,186 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FooterComponent } from './layout/footer/footer.component';
 import { NavigationComponent } from './layout/navigation/navigation.component';
-import { FoundationArticleComponent } from './pages/foundations/foundation-article.component';
-import { FoundationArticleKey } from './pages/foundations/foundation-article.models';
-import { foundationArticleKeyForPath } from './pages/foundations/foundation-article.routes';
 import { HomePageComponent } from './pages/home/home-page.component';
 import { SearchPageComponent } from './pages/search/search-page.component';
+import { CategoryPageComponent } from './pages/category/category-page.component';
+import { WikiArticleComponent } from './pages/wiki-article/wiki-article.component';
+import { WIKI_ARTICLES, WIKI_CATEGORIES, articleForPath, categoryForPath } from './content/wiki.data';
+import { WikiArticle, WikiCategory } from './content/wiki.models';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [NavigationComponent, HomePageComponent, SearchPageComponent, FoundationArticleComponent, FooterComponent],
+  imports: [NavigationComponent, HomePageComponent, SearchPageComponent, CategoryPageComponent, WikiArticleComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('pageContent') private pageContent?: ElementRef<HTMLElement>;
   @ViewChild(NavigationComponent) private navigation?: NavigationComponent;
-  @ViewChild(HomePageComponent) private homePage?: HomePageComponent;
   @ViewChild(SearchPageComponent) private searchPage?: SearchPageComponent;
-  @ViewChild(FoundationArticleComponent) private articlePage?: FoundationArticleComponent;
-
+  @ViewChild(WikiArticleComponent) private articlePage?: WikiArticleComponent;
+  @ViewChild(CategoryPageComponent) private categoryPage?: CategoryPageComponent;
   isDark = false;
   animationsPaused = false;
   isSearchPage = false;
-  articleKey: FoundationArticleKey | null = null;
   hasSearchResults = false;
-  private searchFocusTimer?: ReturnType<typeof setTimeout>;
+  currentPath = '/';
+  article: WikiArticle | null = null;
+  category: WikiCategory | null = null;
+  relatedArticles: WikiArticle[] = [];
+  notFound = false;
+  readonly categories = WIKI_CATEGORIES;
+  private renderTimer?: ReturnType<typeof setTimeout>;
+  private restoreFrame?: number;
+  private entryKey = '';
+  private readonly scrollPositions = new Map<string, number>();
 
-  get isArticlePage(): boolean {
-    return this.articleKey !== null;
-  }
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+
+  get activeCategory(): string { return this.isSearchPage ? 'search' : this.article?.category ?? this.category?.id ?? (this.notFound ? '' : 'home'); }
 
   ngOnInit(): void {
-    if (typeof window === 'undefined') return;
-    this.syncPageFromLocation();
-    this.isDark = window.localStorage.getItem('current_mode') === 'dark';
-    this.animationsPaused = window.localStorage.getItem('current_animation') === 'pause';
+    try {
+      this.isDark = localStorage.getItem('current_mode') === 'dark';
+      this.animationsPaused = localStorage.getItem('current_animation') === 'pause';
+    } catch { /* Browsing with storage disabled still permits theme controls. */ }
     this.syncBodyTheme();
-    this.updateDocumentTitle();
+    this.entryKey = this.ensureHistoryKey();
+    this.syncPageFromLocation();
+    this.afterNavigation(false);
   }
 
   ngOnDestroy(): void {
-    this.cancelSearchFocus();
+    clearTimeout(this.renderTimer);
+    if (this.restoreFrame !== undefined) cancelAnimationFrame(this.restoreFrame);
   }
 
   toggleTheme(): void {
     this.isDark = !this.isDark;
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('current_mode', this.isDark ? 'dark' : 'light');
-    }
+    try { localStorage.setItem('current_mode', this.isDark ? 'dark' : 'light'); } catch {}
     this.syncBodyTheme();
   }
 
   toggleAnimations(): void {
     this.animationsPaused = !this.animationsPaused;
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('current_animation', this.animationsPaused ? 'pause' : 'play');
-    }
+    try { localStorage.setItem('current_animation', this.animationsPaused ? 'pause' : 'play'); } catch {}
   }
 
-  openSearch(event?: Event): void {
-    event?.preventDefault();
-    this.navigation?.closeMenus();
-    this.articleKey = null;
-    this.scrollToTop();
-    this.isSearchPage = true;
-    this.updateUrl('/search.html');
-    this.updateDocumentTitle();
-    // Move focus after Angular has made the search view visible.
-    this.cancelSearchFocus();
-    this.searchFocusTimer = setTimeout(() => {
-      this.searchPage?.focus();
-      this.searchFocusTimer = undefined;
-    }, 0);
-  }
-
-  openArticle(event: Event, path: string): void {
-    const articleKey = foundationArticleKeyForPath(path);
-    if (!articleKey) return;
-    event.preventDefault();
-    this.cancelSearchFocus();
-    this.navigation?.closeMenus(true);
-    this.isSearchPage = false;
-    this.searchPage?.reset();
-    this.articleKey = articleKey;
-    this.updateUrl(path);
-    this.updateDocumentTitle();
-    this.scrollToTop();
-  }
-
-  onPageContentScroll(): void {
-    this.articlePage?.onPageContentScroll();
-  }
-
-  skipToTarget(event: Event): void {
-    event.preventDefault();
-    if (typeof document === 'undefined') return;
-    const target = document.getElementById('main_content') ?? document.getElementById('main-content');
-    if (!target) return;
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', `${window.location.pathname}#main_content`);
-    }
-    this.pageContent?.nativeElement.scrollTo({ top: target.offsetTop, behavior: 'auto' });
-    target.setAttribute('tabindex', '-1');
-    target.focus({ preventScroll: true });
-  }
-
+  openSearch(event?: Event): void { event?.preventDefault(); this.navigate('/search.html'); }
   scrollHome(event: Event): void {
+    if (event instanceof MouseEvent && (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)) return;
     event.preventDefault();
-    this.cancelSearchFocus();
-    this.navigation?.closeDesktopSubmenu(false);
-    if (this.isSearchPage || this.isArticlePage) {
-      this.isSearchPage = false;
-      this.articleKey = null;
-      this.searchPage?.reset();
-      this.updateUrl('/');
-      this.updateDocumentTitle();
-    }
-    this.scrollToTop();
+    this.navigate('/');
+  }
+
+  onInternalLink(event: MouseEvent): void {
+    if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
+    if (!anchor || anchor.hasAttribute('download') || (anchor.target && anchor.target !== '_self')) return;
+    const url = new URL(anchor.href, location.href);
+    if (url.origin !== location.origin || !['http:', 'https:'].includes(url.protocol)) return;
+    if (anchor.getAttribute('href')?.startsWith('#')) return;
+    event.preventDefault();
+    this.navigate(url.pathname + url.search + url.hash);
+  }
+
+  navigate(path: string): void {
+    this.scrollPositions.set(this.ensureHistoryKey(), this.pageContent?.nativeElement.scrollTop ?? 0);
+    this.navigation?.closeMenus(false);
+    if (location.pathname + location.search + location.hash !== path) history.pushState({}, '', path);
+    this.entryKey = this.ensureHistoryKey();
+    this.syncPageFromLocation();
+    this.afterNavigation(true);
   }
 
   @HostListener('window:popstate')
   onPopState(): void {
-    if (typeof window === 'undefined') return;
-    const wasHome = !this.isSearchPage && !this.isArticlePage;
-    this.cancelSearchFocus();
+    if (this.entryKey) this.scrollPositions.set(this.entryKey, this.pageContent?.nativeElement.scrollTop ?? 0);
+    this.entryKey = this.ensureHistoryKey();
+    const restoredPosition = this.scrollPositions.get(this.entryKey);
+    this.navigation?.closeMenus(false);
     this.syncPageFromLocation();
-    this.navigation?.closeMenus(true);
-    this.searchPage?.reset();
-    this.scrollToTop();
-    this.updateDocumentTitle();
-    // A history entry within Home still reapplies the animation preference.
-    if (wasHome && !this.isSearchPage && !this.isArticlePage) {
-      this.homePage?.restartVideo();
-    }
+    this.afterNavigation(true, restoredPosition);
+  }
+
+  onPageContentScroll(): void {
+    this.entryKey = this.ensureHistoryKey();
+    this.scrollPositions.set(this.entryKey, this.pageContent?.nativeElement.scrollTop ?? 0);
+    this.articlePage?.onPageContentScroll();
+    this.categoryPage?.onPageContentScroll();
+  }
+
+  skipToTarget(event: Event): void {
+    event.preventDefault();
+    const target = document.getElementById('main_content');
+    if (!target) return;
+    this.pageContent?.nativeElement.scrollTo({ top: 0, behavior: 'instant' });
+    target.focus({ preventScroll: true });
   }
 
   private syncPageFromLocation(): void {
-    this.isSearchPage = window.location.pathname.endsWith('/search.html');
-    this.articleKey = foundationArticleKeyForPath(window.location.pathname);
+    this.currentPath = location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '') || '/';
+    const path = this.currentPath === '/get-started' ? '/project' : this.currentPath;
+    this.isSearchPage = path === '/search.html' || path === '/search';
+    this.article = articleForPath(path) ?? null;
+    const category = categoryForPath(path);
+    this.category = !this.article && category && path === `/${category.id}` ? category : null;
+    this.relatedArticles = WIKI_ARTICLES.filter(article => article.category === this.activeCategory);
+    this.notFound = !this.isSearchPage && !this.article && !this.category && path !== '/';
+    this.hasSearchResults = false;
+    const title = this.isSearchPage ? 'Search' : this.article?.title ?? this.category?.title ?? (this.notFound ? 'Page not found' : 'Functional Dressing for Diabetic Foot Ulcers');
+    document.title = `${title} — LUT-CHINA`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', this.article?.description ?? this.category?.description ?? 'LUT-CHINA explores functional dressings for diabetic foot ulcers through synthetic biology, from defined active molecules to a four-layer design.');
+    this.changeDetectorRef.markForCheck();
   }
 
-  private scrollToTop(): void {
-    this.pageContent?.nativeElement.scrollTo({ top: 0, behavior: 'auto' });
+  private afterNavigation(focus: boolean, restoredPosition?: number): void {
+    clearTimeout(this.renderTimer);
+    if (this.restoreFrame !== undefined) cancelAnimationFrame(this.restoreFrame);
+    this.pageContent?.nativeElement.scrollTo({ top: 0, behavior: 'instant' });
+    this.renderTimer = setTimeout(() => {
+      if (this.isSearchPage) {
+        this.searchPage?.restoreFromLocation();
+        if (focus) this.searchPage?.focus();
+      } else if (location.hash && this.article) {
+        this.articlePage?.restoreFragment();
+      } else if (location.hash) {
+        let id = location.hash.slice(1);
+        try { id = decodeURIComponent(id); } catch {}
+        const target = document.getElementById(id);
+        const container = this.pageContent?.nativeElement;
+        if (target && container) {
+          container.scrollTo({ top: target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - (innerWidth <= 960 ? 80 : 16), behavior: 'instant' });
+          target.focus({ preventScroll: true });
+        }
+      } else if (focus && !location.hash) {
+        document.getElementById('main_content')?.focus({ preventScroll: true });
+      }
+      this.changeDetectorRef.markForCheck();
+      if (restoredPosition !== undefined) {
+        // Restore after the reader has finished its own initial fragment scroll.
+        this.restoreFrame = requestAnimationFrame(() => {
+          this.restoreFrame = requestAnimationFrame(() => {
+            this.pageContent?.nativeElement.scrollTo({ top: restoredPosition, behavior: 'instant' });
+            this.restoreFrame = undefined;
+          });
+        });
+      }
+    }, 0);
   }
 
-  private cancelSearchFocus(): void {
-    clearTimeout(this.searchFocusTimer);
-    this.searchFocusTimer = undefined;
-  }
-
-  private updateUrl(path: string): void {
-    if (typeof window === 'undefined') return;
-    if (window.location.pathname !== path) window.history.pushState({}, '', path);
-  }
-
-  private updateDocumentTitle(): void {
-    if (typeof document === 'undefined') return;
-    document.title = this.isSearchPage
-      ? 'Search — Material Design 3'
-      : this.isArticlePage
-        ? 'Accessibility overview – Material Design 3'
-        : "Material Design 3 - Google's latest open source design system";
+  private ensureHistoryKey(): string {
+    const state = history.state && typeof history.state === 'object' ? history.state : {};
+    if (typeof state.wikiEntry === 'string') return state.wikiEntry;
+    const key = crypto.randomUUID();
+    history.replaceState({ ...state, wikiEntry: key }, '', location.href);
+    return key;
   }
 
   private syncBodyTheme(): void {
-    if (typeof document === 'undefined') return;
     document.body.classList.toggle('dark-mode', this.isDark);
     document.documentElement.style.colorScheme = this.isDark ? 'dark' : 'light';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', this.isDark ? '#141314' : '#fefbff');
   }
 }

@@ -17,3 +17,6 @@
 *.log
 /coverage
 
+# Python screenshot/check scripts
+__pycache__/
+*.pyc

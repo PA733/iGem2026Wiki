@@ -1,0 +1,99 @@
+<main id="main_content" class="category-main" tabindex="-1">
+  <header class="category-hero">
+    <div class="category-hero-content">
+      <img class="category-shapes" src="/assets/m3-category-shapes.svg" width="152" height="41" alt="" />
+      <h1>{{ category.title }}</h1>
+      <p class="category-description">{{ category.description }}</p>
+      <div class="category-hero-toc"><ng-container *ngTemplateOutlet="toc" /></div>
+    </div>
+  </header>
+
+  <div class="category-mobile-toc"><ng-container *ngTemplateOutlet="toc" /></div>
+  <div class="category-sections">
+    <div class="category-slides">
+    @for (article of articles; track article.slug; let i = $index) {
+      <section class="category-section" [id]="article.slug" tabindex="-1" [attr.aria-labelledby]="'heading-' + article.slug">
+        <div class="category-section-copy">
+          <div class="category-section-text">
+            <h2 [id]="'heading-' + article.slug">{{ article.title }}</h2>
+            <p>{{ article.description }}</p>
+            @if (article.sections[0]; as intro) {
+              <p>{{ intro.paragraphs[0] }}</p>
+            }
+          </div>
+          <div class="category-section-links">
+            <a class="category-card category-link-card" [href]="'/' + article.category + '/' + article.slug">
+              <div><h3>{{ article.subtitle }}</h3><p>Read the full article</p></div>
+              <span class="symbol" aria-hidden="true">arrow_forward</span>
+            </a>
+            @if (articles[(i + 1) % articles.length]; as next) {
+              @if (next.slug !== article.slug) {
+                <a class="category-card category-link-card" [href]="'/' + next.category + '/' + next.slug">
+                  <div><h3>{{ next.title }}</h3><p>{{ next.subtitle }}</p></div>
+                  <span class="symbol" aria-hidden="true">{{ next.icon }}</span>
+                </a>
+              }
+            }
+          </div>
+        </div>
+        <div class="category-art category-inline-art" [class.art-lilac]="i % 3 === 1" [class.art-peach]="i % 3 === 2" aria-hidden="true"><ng-container *ngTemplateOutlet="artwork; context: { $implicit: i }" /></div>
+      </section>
+    }
+    </div>
+    <div class="category-gallery" aria-hidden="true">
+      @for (article of articles; track article.slug; let i = $index) {
+        <div class="category-art category-gallery-panel" [class.active]="activeSection === i" [class.art-lilac]="i % 3 === 1" [class.art-peach]="i % 3 === 2"><ng-container *ngTemplateOutlet="artwork; context: { $implicit: i }" /></div>
+      }
+    </div>
+  </div>
+
+  <section id="explore-wiki" class="category-explore" tabindex="-1" aria-labelledby="explore-title">
+    <h2 id="explore-title">Keep exploring</h2>
+    <p>Every molecule, material and conversation contributes to our project.</p>
+    <div class="category-explore-grid">
+      @for (item of categories; track item.id) {
+        @if (item.id !== category.id) {
+          <a class="category-card category-link-card" [href]="'/' + item.id">
+            <div><h3>{{ item.title }}</h3><p>{{ item.subtitle }}</p></div>
+            <span class="symbol" aria-hidden="true">{{ item.icon }}</span>
+          </a>
+        }
+      }
+    </div>
+  </section>
+</main>
+
+<ng-template #toc>
+      <nav class="category-toc" [attr.aria-label]="category.title + ' sections'">
+        @for (article of articles; track article.slug) {
+          <a class="category-card" [href]="'#' + article.slug" (click)="jumpTo($event, article.slug)">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.subtitle }}</p>
+          </a>
+        }
+        <a class="category-card" href="#explore-wiki" (click)="jumpTo($event, 'explore-wiki')">
+          <h2>Explore the Wiki</h2>
+          <p>Connect laboratory research with real-world needs</p>
+        </a>
+      </nav>
+</ng-template>
+<ng-template #artwork let-i>
+          <svg viewBox="0 0 600 640" class="category-diagram" fill="none">
+            @switch (i % 3) {
+              @case (0) {
+                <g class="diagram-orbit"><ellipse cx="300" cy="310" rx="210" ry="100" transform="rotate(-35 300 310)" stroke="currentColor" stroke-width="2" stroke-dasharray="5 12"/><ellipse cx="300" cy="310" rx="210" ry="100" transform="rotate(35 300 310)" stroke="currentColor" stroke-width="2" stroke-dasharray="5 12"/></g>
+                <g class="diagram-molecule"><path d="M198 245 300 187 402 245V363L300 422 198 363Z" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="m300 187 0-57m102 233 56 32m-260-32-54 32" stroke="currentColor" stroke-width="14" stroke-linecap="round"/><circle cx="300" cy="128" r="34" fill="#ffb700"/><circle cx="459" cy="397" r="34" fill="#eccbff"/><circle cx="142" cy="397" r="34" fill="#b3eac7"/><circle cx="300" cy="304" r="52" fill="currentColor"/></g>
+                <text x="300" y="551" text-anchor="middle" fill="currentColor" font-size="18" letter-spacing="4">MOLECULES FOR REPAIR</text>
+              }
+              @case (1) {
+                <g class="diagram-layers" stroke="currentColor" stroke-width="2"><path class="diagram-layer layer-four" d="m300 323 192 97-192 97-192-97Z" fill="#d6f59b"/><path class="diagram-layer layer-three" d="m300 245 192 97-192 97-192-97Z" fill="#facaaa"/><path class="diagram-layer layer-two" d="m300 167 192 97-192 97-192-97Z" fill="#c2b2f8"/><path class="diagram-layer layer-one" d="m300 89 192 97-192 97-192-97Z" fill="#fefaff"/><path d="m205 165 190 42m-143-67 95 94m-47-71v47" opacity=".35"/></g>
+                <text x="300" y="576" text-anchor="middle" fill="currentColor" font-size="18" letter-spacing="4">DESIGNED TO WORK TOGETHER</text>
+              }
+              @default {
+                <g class="diagram-cycle" stroke="currentColor" stroke-width="3"><rect x="89" y="117" width="185" height="185" rx="55" fill="#dcdaf5"/><circle cx="392" cy="210" r="94" fill="#fbd775"/><path d="m185 330 99 58v115l-99 58-99-58V388Z" fill="#b8dcbc"/><rect x="300" y="335" width="185" height="185" rx="92" fill="#edb8c6"/><path d="M290 197h25m-9-9 9 9-9 9M392 314v16m-9-9 9 9 9-9M300 425h-18m9-9-9 9 9 9M185 334v-18m-9 9 9-9 9 9" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g fill="currentColor" text-anchor="middle" font-size="24"><text x="181" y="219">Design</text><text x="392" y="219">Build</text><text x="392" y="435">Test</text><text x="185" y="449">Learn</text></g>
+              }
+            }
+          </svg>
+
+</ng-template>

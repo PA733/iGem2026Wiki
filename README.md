@@ -1,64 +1,52 @@
-# Material Design 3 页面项目
+# LUT-CHINA Wiki
 
-基于 Angular standalone 组件构建，包含首页、搜索页与 Accessibility 文章页。
+以用户提供的 `LUT_CHINA WIKI.docx` 为内容来源，使用 Angular standalone 组件实现主页、6 个分类页、17 篇项目文章（85 个正文章节）与英文全文搜索。页面布局与交互参考 [Material Design 3 Get started](https://m3.material.io/get-started)。
 
-## 本地运行
+## 运行与构建
 
 ```bash
 npm install
 npm start
-```
-
-开发页面默认位于 `http://localhost:4200/`。
-
-```bash
 npm run build
 ```
 
-生产文件输出到 `dist/material-design-3-clone/browser/`。构建后的 `postbuild` 会为搜索页与本地文章路径生成静态入口，部署到静态服务器时也能直接打开这些地址。
+本地预览地址为 `http://localhost:4200/`。生产文件在 `dist/material-design-3-clone/browser/`。构建后会根据内容索引自动生成所有分类和文章的静态入口，支持直接访问和刷新；`/get-started` 也可进入项目概览。未知地址由应用显示 404 内容，静态服务器可将错误页配置为生成的 `404.html`。
 
-## 文件职责
+## 内容栏目
 
-```text
-src/
-  main.ts                         # 应用启动
-  app/
-    app.component.ts              # 页面切换、浏览器历史、主题与动画偏好
-    app.component.html            # 页面外壳及组件组合
-    layout/
-      navigation/                 # 桌面导航、移动抽屉及菜单数据
-      footer/                     # 共用页脚
-    pages/
-      home/                       # 首页卡片、内容数据和视频控制
-      search/                     # 搜索输入、补全、分组与建议数据
-      foundations/                # 文章渲染、目录、内容数据及路径解析
-  styles.css                      # 全局样式的有序导入入口
-  styles/
-    base.css                      # 字体、重置与基础可访问性样式
-    theme.css                     # 主题变量及共用样式
-    navigation.css                # 导航栏和桌面抽屉
-    page-shell.css                # 页面滚动容器
-    article.css                   # 文章阅读布局
-    search.css                    # 搜索布局
-    home.css                      # 首页及卡片
-    footer.css                    # 页脚
-    responsive/                   # 中屏、移动端、小屏及文章响应式规则
-public/assets/                    # 图片、字体和视频
-tools/                           # 截图、交互检查与页面分析脚本
-```
+| 栏目 | 路径 | 内容 |
+| --- | --- | --- |
+| Project | `/project` | 项目背景、四层敷料设计、实施路径、社区贡献 |
+| Wet lab | `/wet-lab` | 工程循环、细胞实验、元件、验证与结果规划 |
+| Dry lab | `/dry-lab` | 数学模型与辅助决策平台规划 |
+| Human Practices | `/human-practices` | 利益相关方、教育传播、合作规划 |
+| Team | `/team` | 团队组织、成果归属、工作时间线 |
+| Safety | `/safety` | 项目边界与生物安全规划 |
 
-各功能目录中的 `*.component.ts` 管理交互，`*.component.html` 管理模板，`*.data.ts` 保存内容，`*.models.ts` 定义相应的数据类型。修改菜单、卡片或文章内容时，优先编辑对应的数据文件。
+文档中的设计和计划保持其原有状态；未填造实验结果、团队成员、元件编号或已完成合作。网站内容、导航说明、搜索提示与辅助功能标签统一使用英文。
 
-子组件通过输入接收页面状态、通过输出通知页面切换；根组件管理 URL 与全局偏好。搜索输入、菜单展开、视频播放和文章目录状态由各自组件维护。
+## 修改内容与样式
 
-样式集中从 `src/styles.css` 按顺序加载，保留原有主题及跨页面选择器的层叠关系；响应式规则在功能样式之后加载。组件宿主使用 `display: contents`，使组件拆分不额外引入布局盒子。调整样式时请保留入口的导入顺序。
+- `src/app/content/wiki.data.ts`：统一的分类、文章、表格和段落数据；搜索与静态入口均从此生成。
+- `src/app/pages/home/`：首页文案、卡片、SVG 插图与暂停控制。
+- `src/app/pages/category/`：分类首屏、二级入口、固定插图与滚动淡入切换。
+- `src/app/pages/wiki-article/`：文章、分类标签、目录跟随、章节链接复制与深链接。
+- `src/app/pages/search/`：中英文正文检索、摘要、键盘导航与 URL 查询。
+- `src/app/layout/`：桌面/移动导航及共用页脚。
+- `src/app/app.component.ts`：站内路由、历史记录、深色模式与动画偏好。
+- `src/styles.css`：样式入口，响应式规则和新增页面样式按顺序导入。
 
-## 浏览器验证
+参考尺寸、交互和素材归属记录在 [docs/reference-notes.md](docs/reference-notes.md)。
 
-安装 Selenium，并确保本机有 Chrome 和 `/usr/bin/chromedriver`，启动本地页面后执行：
+已保存浏览器实测截图：[主页](docs/screenshots/home-desktop.png)、[分类页](docs/screenshots/project-desktop.png)、[文章页](docs/screenshots/article-desktop.png)、[移动端分类页](docs/screenshots/project-mobile.png)。
+
+## Selenium 验证
+
+按 [AGENTS.md](AGENTS.md) 安装 Selenium、Chrome 和 `/usr/bin/chromedriver`。启动本地站点后执行：
 
 ```bash
-python3 tools/test_interactions.py --url http://127.0.0.1:4200/ --output /tmp/wiki-browser-checks
+python3 tools/test_wiki_pages.py --url http://127.0.0.1:4200 --output /tmp/lut-wiki-checks
+python3 tools/test_wiki_search.py --url http://127.0.0.1:4200 --output /tmp/lut-wiki-search
 ```
 
-脚本检查桌面与移动端导航、搜索、主题与动画偏好、视频控制和文章阅读交互，并输出截图和检查结果。原有截图流程见 [AGENTS.md](AGENTS.md)，批量截图入口为 `tools/capture_screenshots.py` 与 `tools/capture_responsive.py`。
+页面脚本检查所有文章与分类路由、跳转/刷新、页内目录、主题与动画偏好、404 及 390/768/1100/1440px 布局，同时保存截图。搜索脚本检查英文正文、URL 查询恢复、无结果状态与键盘操作。

@@ -184,8 +184,8 @@ main {
 }
 
 .material-card:hover,
-.material-card:focus-visible {
-  border-radius: 40px;
+.material-card:focus {
+  border-radius: 24px;
   color: var(--hover-on-container);
   background: var(--hover-container);
 }
@@ -202,12 +202,12 @@ main {
 }
 
 .material-card:hover .card-media,
-.material-card:focus-visible .card-media {
-  border-radius: 40px;
+.material-card:focus .card-media {
+  border-radius: 24px;
 }
 
 .material-card:hover .card-copy p,
-.material-card:focus-visible .card-copy p {
+.material-card:focus .card-copy p {
   color: var(--hover-on-container);
 }
 
@@ -318,14 +318,14 @@ main {
 }
 
 .next-card:hover,
-.next-card:focus-visible {
-  border-radius: 38px;
+.next-card:focus {
+  border-radius: 24px;
   color: var(--hover-on-container);
   background: var(--hover-container);
 }
 
 .next-card:hover p,
-.next-card:focus-visible p {
+.next-card:focus p {
   color: var(--hover-on-container);
 }
 
@@ -333,3 +333,270 @@ main {
   grid-column: 1;
 }
 
+
+/* Project content keeps the reference's spacing and expressive shape motion. */
+.hero-title h1 {
+  overflow-wrap: normal;
+}
+
+.hero-title .hero-mission {
+  margin-top: 18px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--on-surface-variant);
+}
+
+.get-started {
+  width: auto;
+  min-width: 226px;
+  padding-inline: 32px;
+  background-clip: border-box;
+}
+
+.get-started:hover {
+  background-color: var(--link);
+}
+
+.dressing-scene {
+  isolation: isolate;
+  background: linear-gradient(130deg, #ffe2cb, #f1dded);
+}
+
+.dressing-scene::before,
+.dressing-scene::after {
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  content: '';
+}
+
+.dressing-scene::before {
+  top: -38%;
+  right: -27%;
+  width: 62%;
+  background: #e3d8f4;
+}
+
+.dressing-scene::after {
+  bottom: -24%;
+  left: -13%;
+  width: 38%;
+  background: #f5cfb6;
+}
+
+.scene-caption {
+  position: absolute;
+  left: 32px;
+  color: #5f4d65;
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+.scene-caption-top { top: 28px; }
+.scene-caption-bottom { bottom: 28px; }
+
+.dressing-illustration {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scene-layer,
+.scene-molecule,
+.scene-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.scene-layer {
+  animation: dressing-float 6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+.scene-layer-1 { animation-delay: -1.8s; }
+.scene-layer-2 { animation-delay: -1.2s; }
+.scene-layer-3 { animation-delay: -.6s; }
+.scene-layer-4 { animation-delay: 0s; }
+.scene-molecule-a { animation: molecule-drift 9s ease-in-out infinite; }
+.scene-molecule-b { animation: molecule-drift 11s ease-in-out -4s infinite reverse; }
+.scene-spark { animation: spark-breathe 4s ease-in-out infinite; }
+
+.scene-paused *,
+.scene-paused *::before,
+.scene-paused *::after {
+  animation-play-state: paused !important;
+}
+
+@keyframes dressing-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes molecule-drift {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  50% { transform: translate(8px, -17px) rotate(8deg); }
+}
+
+@keyframes spark-breathe {
+  0%, 100% { opacity: .45; }
+  50% { opacity: 1; }
+}
+
+.video-control {
+  display: grid;
+  place-items: center;
+  border: 0;
+  cursor: pointer;
+  background: #f0dff8;
+}
+
+.video-control:disabled {
+  cursor: default;
+}
+
+.card-media {
+  overflow: hidden;
+}
+
+.home-art,
+.home-art > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-art > svg {
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.art-background { fill: #f2e0d2; }
+.art-single .art-background { fill: #e9def3; }
+.art-dual .art-background { fill: #f7e3d4; }
+.art-contact .art-background { fill: #f4eac8; }
+.art-delivery .art-background { fill: #f9e1d2; }
+.art-absorption .art-background { fill: #d7e8cc; }
+.art-protection .art-background { fill: #e2d9f0; }
+.art-engineering .art-background { fill: #d9cbe8; }
+.art-model .art-background { fill: #e0d8bd; }
+.art-people .art-background { fill: #eadff0; }
+.art-education .art-background { fill: #f1d6ba; }
+.art-safety .art-background { fill: #dce9d2; }
+
+.art-drawing {
+  transform-origin: 50% 50%;
+  transition: transform 500ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.material-card:focus,
+.material-card:active,
+.next-card:focus,
+.next-card:active {
+  border-radius: 48px;
+}
+
+.material-card:focus,
+.next-card:focus {
+  outline: 2px solid var(--on-surface);
+  outline-offset: 0;
+}
+
+.home-main .large-card,
+.home-main .small-card {
+  height: auto;
+}
+
+.home-main .large-card .card-copy {
+  min-height: 148px;
+}
+
+.home-main .io-section .large-card .card-copy {
+  min-height: 178px;
+}
+
+.home-main .small-card .card-copy {
+  min-height: 200px;
+}
+
+.next-arrow {
+  float: right;
+  margin-left: 8px;
+  font-size: 24px;
+  line-height: 32px;
+  transition: transform 250ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.next-card:hover .next-arrow {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 960px) {
+  .dressing-illustration {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .scene-caption {
+    left: 20px;
+    font-size: 7px;
+    letter-spacing: 1.2px;
+  }
+
+  .scene-caption-top { top: 12px; }
+  .scene-caption-bottom { bottom: 12px; }
+
+  .hero-title .hero-mission {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .hero-copy .get-started {
+    min-width: 210px;
+    height: 64px;
+    padding-inline: 24px;
+    font-size: 20px;
+  }
+
+  .home-main .card-copy,
+  .home-main .io-section .large-card .card-copy,
+  .home-main .large-card .card-copy,
+  .home-main .small-card .card-copy {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dressing-scene *,
+  .art-drawing {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Keep diagram captions inside the narrower cards at tablet widths. */
+@media (max-width: 1287px) {
+  .art-single text {
+    text-anchor: middle;
+    transform: translateX(248px);
+  }
+
+  .art-contact text,
+  .art-delivery text,
+  .art-absorption text,
+  .art-protection text {
+    text-anchor: middle;
+    transform: translateX(266px);
+  }
+}
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .art-engineering text:last-of-type {
+    transform: translateX(12px);
+  }
+}

@@ -1,0 +1,176 @@
+<main id="main_content" class="wiki-article" [class.wiki-motion-paused]="animationsPaused" [class.wiki-fragment-entry]="enterWithFragment" tabindex="-1" [attr.aria-label]="article.title">
+  <header class="wiki-article-hero">
+    <div class="wiki-article-hero-copy">
+      <div class="wiki-article-hero-stack">
+        <a class="wiki-article-eyebrow" [href]="'/' + article.category">
+          <span>{{ categoryLabel }}</span><span class="symbol" aria-hidden="true">north_east</span>
+        </a>
+        <h1 [class.wiki-title-long]="article.title.length > 19" [class.wiki-title-medium]="article.title.length > 11 && article.title.length <= 19">{{ article.title }}</h1>
+        <p class="wiki-article-subtitle">{{ article.subtitle }}</p>
+        <p class="wiki-article-description">{{ article.description }}</p>
+        <span class="wiki-article-status"><span aria-hidden="true"></span>{{ article.status }}</span>
+      </div>
+    </div>
+    <div class="wiki-article-art" [attr.data-category]="article.category" [attr.data-art]="article.art" role="img" [attr.aria-label]="article.subtitle + ' · Synthetic biology concept illustration'">
+      <span class="wiki-art-label" aria-hidden="true">LUT_CHINA <span>↗</span></span>
+      <svg viewBox="0 0 600 560" fill="none" aria-hidden="true" focusable="false">
+        @switch (article.category) {
+          @case ('wet-lab') {
+            <circle cx="478" cy="95" r="107" fill="#efceff" />
+            <path d="M-32 406H635M-32 449H635M-32 492H635M81 382V560M174 382V560M267 382V560M360 382V560M453 382V560M546 382V560" stroke="#c4aad1" stroke-width="1.5" />
+            <g class="wiki-art-float">
+              <path d="M225 133H370V162H353V270L426 394C441 420 422 450 393 450H202C173 450 155 420 170 394L242 270V162H225V133Z" fill="#fff6ff" stroke="#35244c" stroke-width="5" stroke-linejoin="round" />
+              <path d="M226 328C258 312 295 354 335 336C351 329 365 322 378 326L417 397C427 415 415 438 393 438H202C180 438 168 415 180 397L219 329Z" fill="#9e80dc" />
+              <path d="M257 187H287M257 211H274M257 235H287" stroke="#35244c" stroke-width="4" stroke-linecap="round" />
+              <circle cx="265" cy="374" r="13" fill="#d4ffb0" /><circle cx="326" cy="405" r="19" fill="#d4ffb0" /><circle cx="345" cy="360" r="7" fill="#d4ffb0" />
+              <path d="M356 88L432 164M392 47L474 129L443 160L361 78L392 47Z" stroke="#35244c" stroke-width="5" fill="#d4ffb0" stroke-linejoin="round" />
+              <path d="M384 114L359 139L321 177" stroke="#35244c" stroke-width="10" stroke-linecap="round" />
+              <path d="M310 205C310 205 297 222 297 230C297 239 303 245 310 245C318 245 324 239 324 230C324 222 310 205 310 205Z" fill="#9e80dc" />
+            </g>
+            <circle cx="118" cy="195" r="45" fill="#35244c" /><path d="M95 195H141M118 172V218" stroke="#edddff" stroke-width="3" />
+            <circle cx="481" cy="355" r="19" fill="#35244c" />
+          }
+          @case ('dry-lab') {
+            <path d="M0 140H600M0 233H600M0 326H600M0 419H600M113 0V560M206 0V560M299 0V560M392 0V560M485 0V560" stroke="#c5ab8c" stroke-width="1.5" />
+            <circle cx="487" cy="112" r="90" fill="#f9d36f" />
+            <rect x="104" y="118" width="390" height="301" rx="34" fill="#fff6e5" stroke="#47331b" stroke-width="5" />
+            <path d="M104 169H494" stroke="#47331b" stroke-width="4" />
+            <circle cx="134" cy="145" r="5" fill="#47331b" /><circle cx="154" cy="145" r="5" fill="#47331b" /><circle cx="174" cy="145" r="5" fill="#47331b" />
+            <path d="M153 357V219M153 357H450" stroke="#b19876" stroke-width="2" />
+            <path d="M155 335C182 335 191 314 214 312C241 310 250 335 282 314C317 291 315 268 350 267C391 266 398 234 448 217" stroke="#c86a36" stroke-width="8" stroke-linecap="round" />
+            <path d="M156 337L212 312L280 314L350 267L447 217" stroke="#c86a36" stroke-width="1" stroke-dasharray="5 8" />
+            <g class="wiki-art-float">
+              <circle cx="214" cy="312" r="10" fill="#f9d36f" stroke="#47331b" stroke-width="3" /><circle cx="350" cy="267" r="10" fill="#f9d36f" stroke="#47331b" stroke-width="3" />
+              <rect x="361" y="357" width="158" height="98" rx="26" fill="#47331b" />
+              <path d="M388 407H414M401 394V420M437 394L451 407L437 420M471 394L457 407L471 420" stroke="#ffe8c6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <path d="M71 223L83 245L105 257L83 269L71 291L59 269L37 257L59 245L71 223Z" fill="#c86a36" />
+          }
+          @case ('human-practices') {
+            <circle cx="299" cy="280" r="213" stroke="#bca894" stroke-width="1.5" />
+            <circle cx="299" cy="280" r="151" stroke="#bca894" stroke-width="1.5" />
+            <g class="wiki-art-float">
+              <path d="M104 144C104 125 120 110 139 110H334C354 110 369 125 369 144V285C369 305 354 320 334 320H200L137 372V320C119 319 104 304 104 285V144Z" fill="#ffb8a1" stroke="#523527" stroke-width="4" stroke-linejoin="round" />
+              <path d="M293 253C293 232 310 215 331 215H473C494 215 511 232 511 253V366C511 387 494 404 473 404H469V447L412 404H331C310 404 293 387 293 366V253Z" fill="#ffe9d8" stroke="#523527" stroke-width="4" stroke-linejoin="round" />
+              <path d="M155 171H309M155 201H264M155 231H220" stroke="#523527" stroke-width="6" stroke-linecap="round" />
+              <circle cx="353" cy="312" r="9" fill="#523527" /><circle cx="401" cy="312" r="9" fill="#523527" /><circle cx="449" cy="312" r="9" fill="#523527" />
+            </g>
+            <circle cx="95" cy="405" r="39" fill="#523527" /><path d="M77 405H113M95 387V423" stroke="#fff2e7" stroke-width="3" />
+            <path d="M458 83L469 108L494 119L469 130L458 155L447 130L422 119L447 108L458 83Z" fill="#bd663d" />
+          }
+          @case ('team') {
+            <circle cx="300" cy="280" r="218" fill="#dce8aa" />
+            <path d="M90 402L288 164L497 402H90Z" stroke="#6a733e" stroke-width="2" stroke-dasharray="7 10" />
+            <g class="wiki-art-float">
+              <path d="M211 250C211 209 244 176 285 176C326 176 359 209 359 250V322H211V250Z" fill="#f8ffe5" stroke="#354329" stroke-width="4" />
+              <circle cx="285" cy="146" r="41" fill="#b9cba0" stroke="#354329" stroke-width="4" />
+              <path d="M69 409C69 368 102 335 143 335C184 335 217 368 217 409V466H69V409Z" fill="#b9cba0" stroke="#354329" stroke-width="4" />
+              <circle cx="143" cy="305" r="41" fill="#f8ffe5" stroke="#354329" stroke-width="4" />
+              <path d="M382 409C382 368 415 335 456 335C497 335 530 368 530 409V466H382V409Z" fill="#7c916b" stroke="#354329" stroke-width="4" />
+              <circle cx="456" cy="305" r="41" fill="#f8ffe5" stroke="#354329" stroke-width="4" />
+            </g>
+            <path d="M295 349L307 377L337 390L307 403L295 431L282 403L253 390L282 377L295 349Z" fill="#354329" />
+            <circle cx="441" cy="129" r="21" fill="#354329" /><circle cx="141" cy="175" r="10" fill="#354329" />
+          }
+          @case ('safety') {
+            <circle cx="300" cy="280" r="202" stroke="#94bca4" stroke-width="1.5" />
+            <circle cx="300" cy="280" r="240" stroke="#94bca4" stroke-width="1.5" stroke-dasharray="3 10" />
+            <g class="wiki-art-float">
+              <path d="M300 100L453 160V276C453 364 386 421 300 468C214 421 147 364 147 276V160L300 100Z" fill="#254838" />
+              <path d="M300 132L425 180V276C425 346 372 395 300 436C228 395 175 346 175 276V180L300 132Z" stroke="#bddbc9" stroke-width="2" />
+              <path d="M226 274L279 327L379 226" stroke="#dcf6b1" stroke-width="19" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <circle cx="128" cy="352" r="44" fill="#dcf6b1" /><path d="M106 352H150M128 330V374" stroke="#254838" stroke-width="4" />
+            <path d="M449 96L460 121L485 132L460 143L449 168L438 143L413 132L438 121L449 96Z" fill="#7da88d" />
+          }
+          @default {
+            <circle cx="301" cy="279" r="212" stroke="#9fbba5" stroke-width="1.5" />
+            <circle cx="301" cy="279" r="148" stroke="#9fbba5" stroke-width="1.5" />
+            <path d="M139 192L294 111L464 205L454 388L284 453L126 358L139 192Z" stroke="#4f7059" stroke-width="2" stroke-dasharray="5 9" />
+            <g class="wiki-art-float">
+              <path d="M148 192L301 279L463 205M301 279L287 452M301 279L129 357M301 279L293 112M301 279L455 388" stroke="#294936" stroke-width="10" stroke-linecap="round" />
+              <circle cx="301" cy="279" r="75" fill="#294936" />
+              <circle cx="148" cy="192" r="43" fill="#f4ffc3" stroke="#294936" stroke-width="3" />
+              <circle cx="463" cy="205" r="48" fill="#a8c99a" stroke="#294936" stroke-width="3" />
+              <circle cx="287" cy="452" r="36" fill="#f4ffc3" stroke="#294936" stroke-width="3" />
+              <circle cx="129" cy="357" r="26" fill="#a8c99a" stroke="#294936" stroke-width="3" />
+              <circle cx="293" cy="112" r="26" fill="#a8c99a" stroke="#294936" stroke-width="3" />
+              <circle cx="455" cy="388" r="26" fill="#f4ffc3" stroke="#294936" stroke-width="3" />
+              <path d="M277 304C270 269 289 242 329 244C336 284 312 311 277 304Z" fill="#d8edbf" />
+              <path d="M269 317L310 268" stroke="#d8edbf" stroke-width="5" stroke-linecap="round" />
+            </g>
+            <path d="M490 87V121M473 104H507" stroke="#294936" stroke-width="3" />
+          }
+        }
+      </svg>
+      <span class="wiki-art-caption" aria-hidden="true">Synthetic biology, shared possibilities.</span>
+    </div>
+  </header>
+
+  @if (categoryArticles.length > 1) {
+    <nav class="wiki-article-tab-list" [attr.aria-label]="categoryLabel + ' articles'">
+      <div class="wiki-article-tabs">
+        @for (entry of categoryArticles; track entry.slug) {
+          <a class="wiki-article-tab" [class.active]="entry.slug === article.slug" [attr.aria-current]="entry.slug === article.slug ? 'page' : null" [href]="articlePath(entry)">{{ entry.title }}</a>
+        }
+      </div>
+    </nav>
+  }
+
+  <div class="wiki-article-content-shell">
+    <aside class="wiki-article-toc">
+      <nav class="wiki-article-toc-nav" aria-label="On this page">
+        <div class="wiki-article-toc-overline">On this page</div>
+        <h2>Overview</h2>
+        <div class="wiki-article-toc-items">
+          <span class="wiki-article-toc-indicator" [class.hidden]="activeSectionIndex === null" [style.transform]="'translateY(' + tocIndicatorTop + 'px)'" [style.height.px]="tocIndicatorHeight" aria-hidden="true"></span>
+          <ul>
+            @for (section of article.sections; track section.id) {
+              <li><a [href]="'#' + section.id" [class.active]="activeSectionIndex === $index" [attr.aria-current]="activeSectionIndex === $index ? 'location' : null" (click)="scrollToSection($event, section.id)">{{ section.heading }}</a></li>
+            }
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="wiki-article-body">
+      @for (section of article.sections; track section.id) {
+        <section class="wiki-article-section" [id]="section.id" [attr.aria-labelledby]="section.id + '-heading'" data-wiki-section tabindex="-1">
+          <button class="wiki-section-copy" type="button" [class.has-feedback]="copiedSection === section.id || copyFailedSection === section.id" [attr.aria-label]="'Copy link to ' + section.heading" (click)="copySectionLink($event, section.id)">
+            <span class="symbol" aria-hidden="true">{{ copiedSection === section.id ? 'check' : 'link' }}</span>
+            <span class="wiki-section-copy-tooltip">{{ copiedSection === section.id ? 'Link copied' : copyFailedSection === section.id ? 'Copy failed' : 'Copy link' }}</span>
+          </button>
+          <h2 [id]="section.id + '-heading'">{{ section.heading }}</h2>
+          @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
+          @if (section.bullets?.length) {
+            <ul class="wiki-article-bullets">@for (bullet of section.bullets; track $index) { <li>{{ bullet }}</li> }</ul>
+          }
+          @if (section.table; as table) {
+            <div class="wiki-article-table-scroll" tabindex="0" role="region" [attr.aria-label]="section.heading + ' data table (scroll horizontally)'">
+              <table>
+                <caption class="wiki-visually-hidden">{{ section.heading }}</caption>
+                <thead><tr>@for (header of table.headers; track $index) { <th scope="col">{{ header }}</th> }</tr></thead>
+                <tbody>@for (row of table.rows; track $index) { <tr>@for (cell of row; track $index) { <td>{{ cell }}</td> }</tr> }</tbody>
+              </table>
+            </div>
+          }
+          @if (section.note) {
+            <aside class="wiki-article-note"><span class="symbol" aria-hidden="true">info</span><p>{{ section.note }}</p></aside>
+          }
+        </section>
+      }
+    </article>
+  </div>
+
+  <nav class="wiki-article-pagination" aria-label="Previous and next articles">
+    <a class="wiki-article-next-card wiki-article-previous" [href]="previousArticle ? articlePath(previousArticle) : '/' + article.category">
+      <span class="symbol" aria-hidden="true">arrow_back</span>
+      <span><small>Previous</small><strong>{{ previousArticle?.title ?? categoryLabel }}</strong></span>
+    </a>
+    <a class="wiki-article-next-card" [href]="nextArticle ? articlePath(nextArticle) : '/' + article.category">
+      <span><small>{{ nextArticle ? 'Up next' : 'Back to overview' }}</small><strong>{{ nextArticle?.title ?? categoryLabel }}</strong></span>
+      <span class="symbol" aria-hidden="true">arrow_forward</span>
+    </a>
+  </nav>
+  <span class="wiki-visually-hidden" role="status" aria-live="polite">{{ copyAnnouncement }}</span>
+</main>

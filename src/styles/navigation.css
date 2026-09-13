@@ -1,6 +1,10 @@
 .nav-rail {
   position: relative;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
   flex: 0 0 88px;
   width: 88px;
   height: 100vh;
@@ -30,15 +34,15 @@
 .search-fab {
   width: 56px;
   height: 56px;
+  flex: 0 0 56px;
   margin: 18px 16px 0;
   border-radius: 16px;
   background: var(--search-container);
-  transition: border-radius 220ms cubic-bezier(.2, 0, 0, 1), transform 180ms ease;
+  transition: background-color 200ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .search-fab:hover {
-  border-radius: 28px;
-  transform: scale(1.04);
+  background: color-mix(in srgb, var(--on-surface-variant) 8%, var(--search-container));
 }
 
 .nav-items {
@@ -46,6 +50,7 @@
   flex-direction: column;
   gap: 12px;
   margin-top: 22px;
+  flex-shrink: 0;
 }
 
 .nav-item {
@@ -67,16 +72,42 @@
   height: 32px;
   place-items: center;
   border-radius: 16px;
-  transition: background-color 180ms ease, border-radius 220ms cubic-bezier(.2, 0, 0, 1);
+  position: relative;
+  isolation: isolate;
+  transition: background-color 200ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .nav-item:hover .nav-icon-wrap {
-  border-radius: 10px;
-  background: var(--surface-container-high);
+  background: color-mix(in srgb, var(--on-surface-variant) 8%, transparent);
 }
 
-.nav-item.active .nav-icon-wrap {
+.nav-icon-wrap::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 16px;
   background: var(--primary-container);
+  opacity: 0;
+  transform: scaleX(.32);
+  transition: opacity 200ms linear, transform 200ms linear;
+  content: '';
+}
+
+.nav-item.active .nav-icon-wrap::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.nav-item .symbol {
+  transition: font-variation-settings 200ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.nav-item:hover .symbol {
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+}
+
+.nav-item.active:hover .symbol {
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
 }
 
 .nav-label {
@@ -95,9 +126,9 @@
 }
 
 .rail-controls {
-  position: absolute;
-  bottom: 22px;
-  left: 20px;
+  margin: auto 20px 22px;
+  padding-top: 24px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -133,7 +164,7 @@
   overflow: hidden;
   color: var(--on-surface);
   background: var(--surface-rail);
-  border-left: 1px solid #e8e0e8;
+  border-left: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
   border-radius: 0 16px 16px 0;
   box-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 6px 2px rgb(0 0 0 / 15%);
   opacity: 0;
@@ -256,8 +287,7 @@
 
 .desktop-topic-toggle {
   appearance: none;
-  font: inherit;
-  width: calc(100% - 11px);
+  width: 100%;
   margin-left: 2px;
 }
 
@@ -267,10 +297,80 @@
   height: 24px;
   font-size: 18px;
   line-height: 24px;
-  text-align: right;
+  text-align: center;
+  transition: transform 300ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .desktop-topic-drawer:not(.desktop-topic-drawer-open) .desktop-topic-item {
   pointer-events: none;
 }
 
+
+.lut-brand-mark {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+}
+
+.lut-brand-mark-center {
+  fill: var(--surface-rail);
+}
+
+.nav-item.active .lut-brand-mark-center,
+.drawer-item.active .lut-brand-mark-center {
+  fill: var(--primary-container);
+}
+
+.topic-arrow-expanded {
+  transform: rotate(180deg);
+}
+
+.desktop-topic-item > span:first-child {
+  min-width: 0;
+}
+
+.desktop-topic-item {
+  height: auto;
+  min-height: 48px;
+  padding-block: 12px;
+}
+
+.desktop-topic-drawer .desktop-topic-nav {
+  opacity: 0;
+  transition: opacity 100ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.desktop-topic-drawer-open .desktop-topic-nav {
+  opacity: 1;
+  transition: opacity 200ms linear 200ms;
+}
+
+.nav-item:focus-visible {
+  border-radius: 18px;
+  outline: 2px solid var(--on-surface);
+  outline-offset: -2px;
+}
+
+.app.motion-paused .drawer-main-nav,
+.app.motion-paused .drawer-submenu {
+  animation: none !important;
+}
+
+.app.motion-paused .desktop-topic-drawer *,
+.app.motion-paused .drawer-layer * {
+  transition-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-rail *,
+  .desktop-topic-drawer,
+  .desktop-topic-drawer *,
+  .drawer-layer,
+  .drawer-layer * {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

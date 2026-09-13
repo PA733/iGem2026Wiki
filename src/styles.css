@@ -8,11 +8,12 @@
 @import './styles/theme.css';
 @import './styles/navigation.css';
 @import './styles/page-shell.css';
-@import './styles/article.css';
 @import './styles/search.css';
 @import './styles/home.css';
 @import './styles/footer.css';
 @import './styles/responsive/medium.css';
 @import './styles/responsive/mobile.css';
 @import './styles/responsive/compact.css';
-@import './styles/responsive/article.css';
+@import './styles/category.css';
+@import './styles/wiki-article.css';
+@import './styles/wiki-shell.css';

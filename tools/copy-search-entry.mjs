@@ -1,34 +1,28 @@
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
-// Angular's application builder emits the browser files below the configured
-// output directory.  A static host serves an exact `/search.html` request as
-// a file and does not provide the history fallback that `ng serve` provides,
-// so keep aliases of the generated entrypoint for every client-side article
-// route beside `index.html`.
+// Generate every static entry directly from the same content index used by
+// navigation/search, so a newly added article also works after a direct reload.
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputCandidates = [
   resolve(projectRoot, 'dist/material-design-3-clone/browser'),
   resolve(projectRoot, 'dist/material-design-3-clone'),
 ];
-
-const browserOutput = outputCandidates.find((directory) => existsSync(join(directory, 'index.html')));
-if (!browserOutput) {
-  console.error('Unable to create search.html: Angular index.html was not found in the build output.');
-  process.exitCode = 1;
-} else {
-  const indexFile = join(browserOutput, 'index.html');
-  const aliases = [
-    'search.html',
-    'foundations/overview/index.html',
-    'foundations/overview/principles/index.html',
-    'foundations/overview/assistive-technology/index.html',
-  ];
-  for (const alias of aliases) {
-    const destination = join(browserOutput, alias);
-    mkdirSync(dirname(destination), { recursive: true });
-    copyFileSync(indexFile, destination);
-    console.log(`Created ${destination} as a static entrypoint alias.`);
-  }
+const browserOutput = outputCandidates.find(directory => existsSync(join(directory, 'index.html')));
+if (!browserOutput) throw new Error('Angular index.html was not found in the build output.');
+const source = readFileSync(resolve(projectRoot, 'src/app/content/wiki.data.ts'), 'utf8');
+const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } }).outputText;
+const { WIKI_CATEGORIES, WIKI_ARTICLES, articlePath } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const aliases = [
+  'search.html', 'search/index.html', 'get-started/index.html', '404.html',
+  ...WIKI_CATEGORIES.map(category => `${category.id}/index.html`),
+  ...WIKI_ARTICLES.map(article => `${articlePath(article).replace(/^\//, '')}/index.html`),
+];
+for (const alias of aliases) {
+  const destination = join(browserOutput, alias);
+  mkdirSync(dirname(destination), { recursive: true });
+  copyFileSync(join(browserOutput, 'index.html'), destination);
 }
+console.log(`Created ${aliases.length} static entrypoints for LUT-CHINA.`);

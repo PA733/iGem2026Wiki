@@ -1,5 +1,5 @@
 export interface NavItem {
-  /** Stable section id used by the source navigation's aria-controls links. */
+  /** Stable local category id used to highlight the active navigation item. */
   id: string;
   label: string;
   icon: string;
