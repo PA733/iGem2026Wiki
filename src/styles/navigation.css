@@ -135,20 +135,48 @@
 }
 
 .rail-control {
+  display: block;
   width: 48px;
   height: 48px;
+  padding: 0;
+  overflow: hidden;
   border: 2px solid transparent;
   border-radius: 50%;
   outline: 1px solid #787579;
   outline-offset: 0;
   background: transparent;
-  transition: background-color 180ms ease, transform 180ms ease;
+  transition: background-color 300ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .rail-control:hover {
   background: var(--surface-container-high);
-  transform: scale(1.04);
 }
+
+.rail-control-track {
+  display: block;
+  transition: transform 300ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.rail-control[aria-checked='true'] .rail-control-track {
+  transform: translateY(-48px);
+}
+
+.rail-control-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: var(--on-surface-variant);
+}
+
+.rail-control-icon .symbol {
+  transform: translate(-2px, -2px);
+  transition: font-variation-settings 200ms cubic-bezier(.2, 0, 0, 1);
+}
+
+.rail-control:hover .symbol { font-variation-settings: 'FILL' 1, 'wght' 600, 'opsz' 24; }
+.rail-control:active .symbol { font-variation-settings: 'FILL' 1, 'wght' 300, 'opsz' 24; }
 
 /* The source desktop rail reveals a narrow topic drawer beside the 88px rail. */
 .desktop-topic-drawer {
@@ -167,14 +195,12 @@
   border-left: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
   border-radius: 0 16px 16px 0;
   box-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 6px 2px rgb(0 0 0 / 15%);
-  opacity: 0;
   pointer-events: none;
   transform: translateX(-240px);
-  transition: transform 300ms cubic-bezier(.2, 0, 0, 1), box-shadow 300ms cubic-bezier(.2, 0, 0, 1), opacity 300ms cubic-bezier(.2, 0, 0, 1);
+  transition: transform 300ms cubic-bezier(.2, 0, 0, 1), box-shadow 300ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .desktop-topic-drawer-open {
-  opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
 }
@@ -185,7 +211,6 @@
 
 @starting-style {
   .desktop-topic-drawer-open {
-    opacity: 0;
     transform: translateX(-240px);
   }
 }
@@ -231,7 +256,7 @@
   grid-template-rows: 0fr;
   margin-left: 10px;
   overflow: hidden;
-  transition: grid-template-rows 300ms cubic-bezier(.2, 0, 0, 1);
+  transition: grid-template-rows 235ms cubic-bezier(.2, 0, 0, 1);
 }
 
 .desktop-topic-children-open {
@@ -336,30 +361,30 @@
   padding-block: 12px;
 }
 
-.desktop-topic-drawer .desktop-topic-nav {
-  opacity: 0;
-  transition: opacity 100ms cubic-bezier(.2, 0, 0, 1);
+.desktop-topic-content-transition .desktop-topic-nav {
+  animation: desktop-topic-enter 200ms linear 200ms both;
 }
 
-.desktop-topic-drawer-open .desktop-topic-nav {
-  opacity: 1;
-  transition: opacity 200ms linear 200ms;
+.desktop-topic-nav.desktop-topic-nav-leave {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: desktop-topic-leave 100ms cubic-bezier(.2, 0, 0, 1) both;
+}
+
+@keyframes desktop-topic-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes desktop-topic-leave {
+  to { opacity: 0; }
 }
 
 .nav-item:focus-visible {
   border-radius: 18px;
   outline: 2px solid var(--on-surface);
   outline-offset: -2px;
-}
-
-.app.motion-paused .drawer-main-nav,
-.app.motion-paused .drawer-submenu {
-  animation: none !important;
-}
-
-.app.motion-paused .desktop-topic-drawer *,
-.app.motion-paused .drawer-layer * {
-  transition-delay: 0ms !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

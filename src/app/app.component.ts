@@ -85,18 +85,20 @@ export class AppComponent implements OnInit, OnDestroy {
     this.navigate(url.pathname + url.search + url.hash);
   }
 
-  navigate(path: string): void {
-    this.scrollPositions.set(this.ensureHistoryKey(), this.pageContent?.nativeElement.scrollTop ?? 0);
+  navigate(path: string, articleTab = false): void {
+    this.scrollPositions.set(this.ensureHistoryKey(), this.scrollingElement?.scrollTop ?? 0);
+    if (!articleTab) this.articlePage?.cancelTabNavigation();
     this.navigation?.closeMenus(false);
     if (location.pathname + location.search + location.hash !== path) history.pushState({}, '', path);
     this.entryKey = this.ensureHistoryKey();
     this.syncPageFromLocation();
-    this.afterNavigation(true);
+    if (!articleTab) this.afterNavigation(true);
   }
 
   @HostListener('window:popstate')
   onPopState(): void {
-    if (this.entryKey) this.scrollPositions.set(this.entryKey, this.pageContent?.nativeElement.scrollTop ?? 0);
+    if (this.entryKey) this.scrollPositions.set(this.entryKey, this.scrollingElement?.scrollTop ?? 0);
+    this.articlePage?.cancelTabNavigation();
     this.entryKey = this.ensureHistoryKey();
     const restoredPosition = this.scrollPositions.get(this.entryKey);
     this.navigation?.closeMenus(false);
@@ -106,16 +108,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onPageContentScroll(): void {
     this.entryKey = this.ensureHistoryKey();
-    this.scrollPositions.set(this.entryKey, this.pageContent?.nativeElement.scrollTop ?? 0);
+    this.scrollPositions.set(this.entryKey, this.scrollingElement?.scrollTop ?? 0);
     this.articlePage?.onPageContentScroll();
     this.categoryPage?.onPageContentScroll();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    if (innerWidth <= 960) this.onPageContentScroll();
+  }
+
+  private get scrollingElement(): HTMLElement | undefined {
+    return innerWidth <= 960 ? document.scrollingElement as HTMLElement : this.pageContent?.nativeElement;
   }
 
   skipToTarget(event: Event): void {
     event.preventDefault();
     const target = document.getElementById('main_content');
     if (!target) return;
-    this.pageContent?.nativeElement.scrollTo({ top: 0, behavior: 'instant' });
+    this.scrollingElement?.scrollTo({ top: 0, behavior: 'instant' });
     target.focus({ preventScroll: true });
   }
 
@@ -138,7 +149,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private afterNavigation(focus: boolean, restoredPosition?: number): void {
     clearTimeout(this.renderTimer);
     if (this.restoreFrame !== undefined) cancelAnimationFrame(this.restoreFrame);
-    this.pageContent?.nativeElement.scrollTo({ top: 0, behavior: 'instant' });
+    this.scrollingElement?.scrollTo({ top: 0, behavior: 'instant' });
     this.renderTimer = setTimeout(() => {
       if (this.isSearchPage) {
         this.searchPage?.restoreFromLocation();
@@ -149,9 +160,9 @@ export class AppComponent implements OnInit, OnDestroy {
         let id = location.hash.slice(1);
         try { id = decodeURIComponent(id); } catch {}
         const target = document.getElementById(id);
-        const container = this.pageContent?.nativeElement;
+        const container = this.scrollingElement;
         if (target && container) {
-          container.scrollTo({ top: target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - (innerWidth <= 960 ? 80 : 16), behavior: 'instant' });
+          container.scrollTo({ top: target.getBoundingClientRect().top - (innerWidth <= 960 ? 0 : container.getBoundingClientRect().top) + container.scrollTop - (innerWidth <= 960 ? 80 : 16), behavior: 'instant' });
           target.focus({ preventScroll: true });
         }
       } else if (focus && !location.hash) {
@@ -162,7 +173,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // Restore after the reader has finished its own initial fragment scroll.
         this.restoreFrame = requestAnimationFrame(() => {
           this.restoreFrame = requestAnimationFrame(() => {
-            this.pageContent?.nativeElement.scrollTo({ top: restoredPosition, behavior: 'instant' });
+            this.scrollingElement?.scrollTo({ top: restoredPosition, behavior: 'instant' });
             this.restoreFrame = undefined;
           });
         });

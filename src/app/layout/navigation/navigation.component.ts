@@ -40,9 +40,11 @@ export class NavigationComponent implements OnDestroy {
 
   isMobileMenuOpen = false;
   isMobileMenuMounted = false;
+  mobileContentTransition = false;
   mobileMenuSection: string | null = null;
   desktopMenuSection: string | null = null;
   desktopPanelOpen = false;
+  desktopContentTransition = false;
   private expandedMobileSubmenuItems = new Set<MobileSubmenuItem>();
   private expandedDesktopSubmenuItems = new Set<MobileSubmenuItem>();
   private mobileMenuTrigger?: HTMLElement;
@@ -102,6 +104,8 @@ export class NavigationComponent implements OnDestroy {
     this.cancelDesktopSubmenuClose();
     if (this.desktopOpenTimer !== undefined) this.cancelTimer(this.desktopOpenTimer);
     const wasOpen = this.desktopPanelOpen && !!this.desktopMenuSection;
+    if (!wasOpen) this.desktopContentTransition = false;
+    else if (this.desktopMenuSection !== item.label) this.desktopContentTransition = true;
     if (this.desktopMenuSection !== item.label) {
       this.expandedDesktopSubmenuItems = this.initiallyExpandedItems(item.label);
     }
@@ -151,7 +155,7 @@ export class NavigationComponent implements OnDestroy {
     if (!item.expandable) return;
     if (['Enter', ' ', 'ArrowRight', 'ArrowDown'].includes(event.key)) {
       this.openDesktopSubmenu(event, item);
-      this.defer(() => document.querySelector<HTMLElement>('.desktop-topic-item')?.focus(), 30);
+      this.defer(() => document.querySelector<HTMLElement>('.desktop-topic-nav:not(.desktop-topic-nav-leave) .desktop-topic-item')?.focus(), 300);
     }
   }
 
@@ -212,11 +216,20 @@ export class NavigationComponent implements OnDestroy {
     }
     this.isMobileMenuMounted = true;
     this.isMobileMenuOpen = true;
-    this.mobileMenuSection = null;
-    this.expandedMobileSubmenuItems = new Set();
+    this.mobileContentTransition = false;
+    const activeSection = this.isArticlePage
+      ? this.navItems.find((item) => item.expandable && this.isNavItemActive(item))?.label
+      : undefined;
+    this.mobileMenuSection = activeSection ?? null;
+    this.mobileSubmenuTrigger = activeSection;
+    this.expandedMobileSubmenuItems = activeSection ? this.initiallyExpandedItems(activeSection) : new Set();
+    document.documentElement.classList.add('navigation-scroll-locked');
     this.defer(() => {
-      if (this.isMobileMenuOpen) document.querySelector<HTMLElement>('.drawer-header button')?.focus();
-    }, 0);
+      if (this.isMobileMenuOpen) {
+        const activeItem = document.querySelector<HTMLElement>('.mobile-drawer .drawer-item.active');
+        (activeItem ?? document.querySelector<HTMLElement>('.drawer-header button'))?.focus({ preventScroll: true });
+      }
+    }, 300);
   }
 
   closeMobileMenu(restoreFocus = true): void {
@@ -227,10 +240,12 @@ export class NavigationComponent implements OnDestroy {
     if (this.mobileCloseTimer !== undefined) this.cancelTimer(this.mobileCloseTimer);
     this.mobileCloseTimer = this.defer(() => {
       this.isMobileMenuMounted = false;
+      this.mobileContentTransition = false;
       this.mobileMenuSection = null;
       this.expandedMobileSubmenuItems = new Set();
       this.mobileSubmenuTrigger = undefined;
       this.mobileCloseTimer = undefined;
+      document.documentElement.classList.remove('navigation-scroll-locked');
       this.changeDetectorRef.detectChanges();
     }, 300);
     if (restoreFocus && trigger?.isConnected) trigger.focus();
@@ -240,16 +255,18 @@ export class NavigationComponent implements OnDestroy {
   openMobileSubmenu(event: Event, item: NavItem): void {
     if (!item.expandable || !this.mobileSubmenus[item.label] || this.isModifiedClick(event)) return;
     event.preventDefault();
+    this.mobileContentTransition = true;
     this.mobileSubmenuTrigger = item.label;
     this.mobileMenuSection = item.label;
     this.expandedMobileSubmenuItems = this.initiallyExpandedItems(item.label);
     this.defer(() => {
       if (this.isMobileMenuOpen) document.querySelector<HTMLElement>('.drawer-back')?.focus();
-    }, 0);
+    }, 300);
   }
 
   closeMobileSubmenu(): void {
     const section = this.mobileSubmenuTrigger;
+    this.mobileContentTransition = true;
     this.mobileMenuSection = null;
     this.mobileSubmenuTrigger = undefined;
     this.expandedMobileSubmenuItems = new Set();
@@ -257,7 +274,7 @@ export class NavigationComponent implements OnDestroy {
       if (!this.isMobileMenuOpen) return;
       Array.from(document.querySelectorAll<HTMLElement>('.mobile-drawer .drawer-item'))
         .find((item) => item.getAttribute('aria-label') === section)?.focus();
-    }, 0);
+    }, 300);
   }
 
   openMobileSubmenuItem(event: Event, item: MobileSubmenuItem): void {
@@ -335,7 +352,7 @@ export class NavigationComponent implements OnDestroy {
     if (event.key !== 'Tab' || !this.isMobileMenuOpen) return;
     const layer = document.querySelector<HTMLElement>('.drawer-layer');
     const focusable = Array.from(layer?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]') ?? [])
-      .filter((item) => item.tabIndex >= 0 && !item.closest('[inert], [aria-hidden="true"]') && item.getClientRects().length > 0);
+      .filter((item) => item.tabIndex >= 0 && !item.closest('[inert], [aria-hidden="true"], .drawer-main-leave, .drawer-submenu-leave') && item.getClientRects().length > 0);
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (!first || !last) return;
@@ -355,6 +372,7 @@ export class NavigationComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    document.documentElement.classList.remove('navigation-scroll-locked');
     for (const timer of this.pendingTimers) clearTimeout(timer);
     this.pendingTimers.clear();
   }

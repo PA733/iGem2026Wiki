@@ -6,7 +6,7 @@
         @if (isSearchPage) {
           <app-search-page [isSearchPage]="true" (resultsChanged)="hasSearchResults = $event" />
         } @else if (article) {
-          <app-wiki-article [article]="article" [scrollContainer]="pageContent" [relatedArticles]="relatedArticles" [animationsPaused]="animationsPaused" />
+          <app-wiki-article [article]="article" [scrollContainer]="pageContent" [relatedArticles]="relatedArticles" [animationsPaused]="animationsPaused" (tabNavigated)="navigate($event, true)" />
         } @else if (category) {
           <app-category-page [category]="category" [articles]="relatedArticles" [scrollContainer]="pageContent" [animationsPaused]="animationsPaused" />
         } @else if (notFound) {

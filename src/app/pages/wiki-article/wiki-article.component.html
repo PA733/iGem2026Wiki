@@ -108,10 +108,21 @@
   </header>
 
   @if (categoryArticles.length > 1) {
-    <nav class="wiki-article-tab-list" [attr.aria-label]="categoryLabel + ' articles'">
-      <div class="wiki-article-tabs">
-        @for (entry of categoryArticles; track entry.slug) {
-          <a class="wiki-article-tab" [class.active]="entry.slug === article.slug" [attr.aria-current]="entry.slug === article.slug ? 'page' : null" [href]="articlePath(entry)">{{ entry.title }}</a>
+    <nav class="wiki-article-tab-list" [class.sticky]="tabsSticky" [attr.aria-label]="categoryLabel + ' articles'">
+      <div class="wiki-article-tab-controls" [class.controls-hidden]="controlsHidden">
+        @if (tabsOverflow && previousArticle) {
+          <button type="button" class="wiki-tab-step" aria-label="Go to previous tab" (click)="stepTab(-1)"><span class="symbol" aria-hidden="true">chevron_left</span></button>
+        }
+        <div class="wiki-article-tabs" role="tablist" [attr.aria-label]="categoryLabel + ' articles'">
+          @for (entry of categoryArticles; track entry.slug) {
+            <a class="wiki-article-tab" role="tab" [id]="'article-tab-' + entry.slug" [class.active]="entry.slug === article.slug"
+              [attr.aria-selected]="entry.slug === article.slug" [attr.tabindex]="entry.slug === article.slug ? 0 : -1"
+              aria-controls="article-panel" [attr.aria-current]="entry.slug === article.slug ? 'page' : null"
+              [href]="articlePath(entry)" (click)="selectTab($event, entry)" (keydown)="onTabKeydown($event, $index)"><span>{{ entry.title }}</span></a>
+          }
+        </div>
+        @if (tabsOverflow && nextArticle) {
+          <button type="button" class="wiki-tab-step" aria-label="Go to next tab" (click)="stepTab(1)"><span class="symbol" aria-hidden="true">chevron_right</span></button>
         }
       </div>
     </nav>
@@ -133,7 +144,7 @@
       </nav>
     </aside>
 
-    <article class="wiki-article-body">
+    <article class="wiki-article-body" id="article-panel" role="tabpanel" [attr.aria-labelledby]="categoryArticles.length > 1 ? 'article-tab-' + article.slug : null" [attr.aria-label]="categoryArticles.length === 1 ? article.title : null">
       @for (section of article.sections; track section.id) {
         <section class="wiki-article-section" [id]="section.id" [attr.aria-labelledby]="section.id + '-heading'" data-wiki-section tabindex="-1">
           <button class="wiki-section-copy" type="button" [class.has-feedback]="copiedSection === section.id || copyFailedSection === section.id" [attr.aria-label]="'Copy link to ' + section.heading" (click)="copySectionLink($event, section.id)">
@@ -173,4 +184,5 @@
     </a>
   </nav>
   <span class="wiki-visually-hidden" role="status" aria-live="polite">{{ copyAnnouncement }}</span>
+  <button class="wiki-back-to-top" [class.show]="showBackToTop && !controlsHidden" [attr.tabindex]="showBackToTop && !controlsHidden ? 0 : -1" [attr.aria-hidden]="!showBackToTop || controlsHidden" type="button" aria-label="Back to article contents" (click)="backToContent(true)"><span class="symbol" aria-hidden="true">vertical_align_top</span></button>
 </main>

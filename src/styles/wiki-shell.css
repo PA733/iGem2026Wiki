@@ -8,8 +8,11 @@
 .not-found .get-started { width: auto; padding: 0 32px; }
 .category-card:hover { border-radius: 24px; }
 .category-card:active, .category-card:focus-visible { border-radius: 48px; }
-.app.motion-paused *, .app.motion-paused *::before, .app.motion-paused *::after { animation-play-state: paused !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-.app.motion-paused .category-main, .app.motion-paused .home-main, .app.motion-paused .wiki-article { animation: none !important; }
+/* Playback controls pause looping artwork, while navigation and UI feedback
+   retain their transitions. The home scene has its own local media control. */
+.app.motion-paused :is(.diagram-orbit, .diagram-molecule, .diagram-layer, .wiki-art-float) {
+  animation-play-state: paused !important;
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }

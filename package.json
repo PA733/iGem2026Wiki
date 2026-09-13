@@ -7,6 +7,8 @@
     "start": "ng serve",
     "postbuild": "node tools/copy-search-entry.mjs",
     "build": "ng build",
+    "cf:login": "node tools/cloudflare-pages.mjs login",
+    "deploy": "node tools/cloudflare-pages.mjs deploy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

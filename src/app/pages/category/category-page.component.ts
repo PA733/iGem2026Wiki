@@ -25,7 +25,9 @@ export class CategoryPageComponent implements OnChanges {
   }
 
   onPageContentScroll(): void {
-    const readingLine = this.scrollContainer.getBoundingClientRect().top + this.scrollContainer.clientHeight * .55;
+    const readingLine = this.usesDocumentScroll
+      ? window.innerHeight * .55
+      : this.scrollContainer.getBoundingClientRect().top + this.scrollContainer.clientHeight * .55;
     let index = 0;
     this.articles.forEach((article, i) => {
       const element = document.getElementById(article.slug);
@@ -42,13 +44,19 @@ export class CategoryPageComponent implements OnChanges {
     event.preventDefault();
     const target = document.getElementById(id);
     if (!target) return;
-    const reduceMotion = this.animationsPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const offset = window.innerWidth > 1294 ? (this.scrollContainer.clientHeight - target.clientHeight) / 2 : (window.innerWidth <= 960 ? 80 : 16);
-    this.scrollContainer.scrollTo({
-      top: target.getBoundingClientRect().top - this.scrollContainer.getBoundingClientRect().top + this.scrollContainer.scrollTop - offset,
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const container = this.usesDocumentScroll ? document.scrollingElement as HTMLElement : this.scrollContainer;
+    const containerTop = this.usesDocumentScroll ? 0 : container.getBoundingClientRect().top;
+    const offset = window.innerWidth > 1294 ? (container.clientHeight - target.clientHeight) / 2 : (this.usesDocumentScroll ? 80 : 16);
+    container.scrollTo({
+      top: target.getBoundingClientRect().top - containerTop + container.scrollTop - offset,
       behavior: reduceMotion ? 'instant' : 'smooth',
     });
-    history.replaceState({}, '', `${location.pathname}#${id}`);
+    history.replaceState(history.state, '', `${location.pathname}#${id}`);
     target.focus({ preventScroll: true });
+  }
+
+  private get usesDocumentScroll(): boolean {
+    return window.matchMedia('(max-width: 960px)').matches;
   }
 }

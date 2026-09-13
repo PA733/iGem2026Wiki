@@ -5,6 +5,10 @@
 /dist
 /.angular
 
+# Cloudflare local login, logs and deployment state
+/.cloudflare/
+/.wrangler/
+
 # IDE and OS files
 /.idea
 /.vscode/*

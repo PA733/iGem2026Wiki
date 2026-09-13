@@ -62,7 +62,7 @@
       </svg>
       <span class="scene-caption scene-caption-top" aria-hidden="true">ENGINEERED FOR CARE</span>
       <span class="scene-caption scene-caption-bottom" aria-hidden="true">FOUR LAYERS. ONE PURPOSE.</span>
-      <button class="video-control" type="button" [attr.aria-label]="isVideoPaused ? 'Play dressing animation' : 'Pause dressing animation'" [title]="animationsPaused ? 'Animations are paused in settings' : (isVideoPaused ? 'Play animation' : 'Pause animation')" [attr.aria-pressed]="isVideoPaused" [disabled]="animationsPaused" (click)="toggleVideo()">
+      <button class="video-control" type="button" [attr.aria-label]="isVideoPaused ? 'Play dressing animation' : 'Pause dressing animation'" [title]="isVideoPaused ? 'Play animation' : 'Pause animation'" [attr.aria-pressed]="isVideoPaused" (click)="toggleVideo()">
         <span class="symbol" aria-hidden="true">{{ isVideoPaused ? 'play_arrow' : 'pause' }}</span>
       </button>
     </div>

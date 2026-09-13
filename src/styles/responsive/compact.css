@@ -172,9 +172,16 @@
     padding-inline: 4px;
   }
 
+  .drawer-header {
+    padding-inline: 4px;
+  }
+
+  .drawer-search-through {
+    padding-right: 4px;
+  }
+
   .mobile-brand > span:last-child {
-    display: inline;
-    margin-left: 12px;
+    display: none;
   }
 }
 
@@ -183,4 +190,3 @@
     display: block;
   }
 }
-

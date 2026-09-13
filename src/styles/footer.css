@@ -122,14 +122,6 @@
   height: 23px;
 }
 
-.motion-paused *,
-.motion-paused *::before,
-.motion-paused *::after {
-  transition-duration: 0s !important;
-  animation-play-state: paused !important;
-}
-
-
 .footer-project-mark {
   display: inline-flex;
   align-items: center;

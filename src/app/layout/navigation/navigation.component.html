@@ -48,25 +48,34 @@
     <button type="button" class="rail-control" role="switch" [attr.aria-checked]="!animationsPaused"
       [attr.aria-label]="animationsPaused ? 'Play animations' : 'Pause animations'"
       [title]="animationsPaused ? 'Play animations' : 'Pause animations'" (click)="toggleAnimations()">
-      <span class="symbol" aria-hidden="true">{{ animationsPaused ? 'play_arrow' : 'pause' }}</span>
+      <span class="rail-control-track" aria-hidden="true">
+        <span class="rail-control-icon"><span class="symbol">play_arrow</span></span>
+        <span class="rail-control-icon"><span class="symbol">pause</span></span>
+      </span>
     </button>
     <button type="button" class="rail-control" role="switch" [attr.aria-checked]="isDark"
       [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
       [title]="isDark ? 'Switch to light mode' : 'Switch to dark mode'" (click)="toggleTheme()">
-      <span class="symbol" aria-hidden="true">{{ isDark ? 'light_mode' : 'dark_mode' }}</span>
+      <span class="rail-control-track" aria-hidden="true">
+        <span class="rail-control-icon"><span class="symbol">dark_mode</span></span>
+        <span class="rail-control-icon"><span class="symbol">light_mode</span></span>
+      </span>
     </button>
   </div>
 </aside>
 
 @if (desktopMenuSection; as section) {
   <aside class="desktop-topic-drawer" [class.desktop-topic-drawer-open]="desktopPanelOpen"
+    [class.desktop-topic-content-transition]="desktopContentTransition"
     [attr.aria-label]="section + ' navigation'" [attr.aria-hidden]="desktopPanelOpen ? null : 'true'"
     [attr.inert]="desktopPanelOpen ? null : ''"
     (mouseenter)="cancelDesktopSubmenuClose()" (mouseleave)="scheduleDesktopSubmenuClose()">
-    <nav id="desktop-navigation" class="desktop-topic-nav" [attr.aria-label]="section + ' pages'">
+    @for (sectionName of [section]; track sectionName) {
+    <nav id="desktop-navigation" class="desktop-topic-nav" animate.leave="desktop-topic-nav-leave" [attr.aria-label]="sectionName + ' pages'">
       <ng-container [ngTemplateOutlet]="desktopTopicTree"
-        [ngTemplateOutletContext]="{ $implicit: mobileSubmenus[section], depth: 0, visible: desktopPanelOpen }"></ng-container>
+        [ngTemplateOutletContext]="{ $implicit: mobileSubmenus[sectionName], depth: 0, visible: desktopPanelOpen }"></ng-container>
     </nav>
+    }
   </aside>
 }
 
@@ -102,20 +111,20 @@
 </ng-template>
 
 @if (isMobileMenuMounted) {
-  <div class="drawer-layer" [class.drawer-layer-open]="isMobileMenuOpen" role="dialog" aria-modal="true"
+  <div class="drawer-layer" [class.drawer-layer-open]="isMobileMenuOpen" [class.drawer-content-transition]="mobileContentTransition" role="dialog" aria-modal="true"
     aria-label="LUT-CHINA navigation" [attr.inert]="isMobileMenuOpen ? null : ''" [attr.aria-hidden]="isMobileMenuOpen ? null : 'true'">
     <button class="drawer-scrim" type="button" tabindex="-1" aria-label="Close navigation" (click)="closeMobileMenu()"></button>
-    <aside id="mobile-navigation" class="mobile-drawer" aria-label="Navigation drawer">
-      <div class="drawer-header">
+    <div class="drawer-header">
         <button class="mobile-bar-button" type="button" aria-label="Close navigation" title="Close navigation" (click)="closeMobileMenu()">
-          <span class="symbol" aria-hidden="true">menu_open</span>
+          <span class="symbol" aria-hidden="true">{{ isMobileMenuOpen ? 'menu_open' : 'menu' }}</span>
         </button>
         <a class="mobile-brand" href="/" aria-label="LUT-CHINA homepage" (click)="scrollHome($event)">
           <ng-container [ngTemplateOutlet]="brandMark"></ng-container><span>LUT-CHINA</span>
         </a>
-      </div>
+    </div>
+    <aside id="mobile-navigation" class="mobile-drawer" aria-label="Navigation drawer">
       @if (mobileMenuSection; as section) {
-        <div class="drawer-submenu" [attr.aria-label]="section + ' navigation'">
+        <div class="drawer-submenu" animate.leave="drawer-submenu-leave" [attr.aria-label]="section + ' navigation'">
           <button class="drawer-back" type="button" aria-label="Back to main menu" (click)="closeMobileSubmenu()">
             <span class="symbol" aria-hidden="true">arrow_back</span><span>Main menu</span>
           </button>
@@ -125,7 +134,7 @@
           </nav>
         </div>
       } @else {
-        <nav class="drawer-nav drawer-main-nav" aria-label="Main">
+        <nav class="drawer-nav drawer-main-nav" animate.leave="drawer-main-leave" aria-label="Main">
           @for (item of navItems; track item.id) {
             <a class="drawer-item" [class.active]="isNavItemActive(item)" [href]="item.href"
               [attr.aria-current]="isNavItemActive(item) ? 'true' : null"

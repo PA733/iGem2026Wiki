@@ -317,7 +317,3 @@
     transition: none !important;
   }
 }
-
-.motion-paused .wiki-search * {
-  transition: none !important;
-}
