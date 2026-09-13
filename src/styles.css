@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Google Sans Text';
+  src: url('/assets/google-sans-text-400-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Google Sans Text';
+  src: url('/assets/google-sans-text-500-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/assets/google-sans-475-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Google Symbols';
+  src: url('/assets/google-symbols-variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+}
+
+:root {
+  color-scheme: light;
+  font-family: 'Google Sans Text', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  color: #1c1b1d;
+  background: #fefbff;
+  font-family: 'Google Sans Text', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid #7357d8;
+  outline-offset: 2px;
+}

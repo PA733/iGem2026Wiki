@@ -1,0 +1,19 @@
+# Dependencies
+/node_modules
+
+# Angular build output
+/dist
+/.angular
+
+# IDE and OS files
+/.idea
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/launch.json
+!/.vscode/tasks.json
+.DS_Store
+
+# Logs and coverage
+*.log
+/coverage
+
