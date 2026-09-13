@@ -1,0 +1,131 @@
+.site-footer {
+  width: calc(100% - 16px);
+  margin: 120px 8px 0;
+}
+
+.wave {
+  height: 8px;
+  opacity: .55;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='9' viewBox='0 0 60 9' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 4.5C7.5-1.5 7.5 10.5 15 4.5S22.5-1.5 30 4.5s7.5 6 15 0 7.5-6 15 0' fill='none' stroke='%23d7ccd8' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+}
+
+.footer-content {
+  display: grid;
+  width: calc(100% - 41px);
+  height: 446px;
+  margin-inline: 20.5px;
+  padding: 64px 40px;
+  grid-template-columns: 570px 190px 190px 190px;
+  grid-template-rows: 228px 26px;
+  column-gap: 20px;
+  row-gap: 64px;
+}
+
+.footer-about {
+  width: 570px;
+  max-width: none;
+}
+
+.footer-mark {
+  display: block;
+  width: 42px;
+  height: 42px;
+  margin-left: 0;
+  padding: 1px;
+  color: var(--on-surface) !important;
+  font-size: 40px;
+  line-height: 40px;
+  text-decoration: none;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.footer-about p {
+  width: 506px;
+  margin: 24px 64px 16px 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.footer-column {
+  display: flex;
+  padding-top: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-column h3 {
+  margin: 0 0 20px;
+  color: var(--on-surface-variant);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.footer-column > a {
+  height: 26px;
+  margin-bottom: 20px;
+  padding: 1px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.footer-more h3:nth-of-type(2) {
+  margin-top: 4px;
+}
+
+.footer-legal {
+  grid-column: 1 / -1;
+  display: flex;
+  width: 1200px;
+  height: 26px;
+  min-height: 0;
+  padding: 0;
+  align-items: center;
+  gap: 0;
+}
+
+.footer-legal a {
+  display: inline-flex;
+  height: 26px;
+  padding: 1px;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.google-wordmark {
+  width: 73px;
+  margin-right: 32px;
+  color: var(--on-surface) !important;
+  text-decoration: none;
+}
+
+.legal-links {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (min-width: 1288px) {
+  .video-control {
+    bottom: 6px;
+  }
+}
+
+.google-wordmark svg {
+  display: block;
+  width: 71px;
+  height: 23px;
+}
+
+.motion-paused *,
+.motion-paused *::before,
+.motion-paused *::after {
+  transition-duration: 0s !important;
+  animation-play-state: paused !important;
+}
+

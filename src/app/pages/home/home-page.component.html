@@ -1,0 +1,152 @@
+<main class="home-main" [attr.id]="isSearchPage || isArticlePage ? 'home-main-content' : 'main_content'" aria-label="Main Content" tabindex="-1">
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="hero-stack">
+        <div class="hero-title">
+          <h1 tabindex="-1">Material Design</h1>
+          <p>Material Design 3 is Google’s open-source design system for building beautiful, usable products.</p>
+        </div>
+          <a class="get-started" href="https://m3.material.io/get-started" aria-label="Get started">Get started</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <video #heroVideo autoplay muted loop playsinline preload="auto" aria-label="Material Design product montage">
+        <source src="assets/hero-homepage-2026.mp4" type="video/mp4" />
+      </video>
+      <button
+        class="video-control"
+        type="button"
+        [attr.aria-label]="isVideoPaused ? 'Play Video' : 'Pause Video'"
+        [title]="isVideoPaused ? 'Play video' : 'Pause video'"
+        (click)="toggleVideo()"
+      >
+        <span class="symbol">{{ isVideoPaused ? 'play_arrow' : 'pause' }}</span>
+      </button>
+    </div>
+  </header>
+
+  <article class="home-content">
+    <section class="content-section io-section" aria-labelledby="io-heading">
+      <h2 id="io-heading">Material at Google I/O 2026</h2>
+      <div class="card-grid feature-grid">
+        @for (card of ioCards; track card.title; let index = $index) {
+          <a
+            class="material-card"
+            [class.feature-card]="card.size === 'feature'"
+            [class.large-card]="card.size === 'large'"
+            [class.first-feature]="index === 0"
+            [href]="card.href"
+            [attr.aria-label]="card.title"
+            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
+            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
+          >
+            @if (card.image) {
+              <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
+            }
+            <div class="card-copy">
+              @if (card.date) { <span class="card-date">{{ card.date }}</span> }
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="content-section expressive-intro" aria-labelledby="expressive-heading">
+      <h2 id="expressive-heading">M3 Expressive: Design with emotion</h2>
+      <p class="section-intro">
+        Build more usable and engaging products with emotion-driven UX. M3 Expressive adds vibrant
+        <a href="https://m3.material.io/styles/color/system/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">colors</a>, intuitive
+        <a href="https://m3.material.io/styles/motion/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">motion</a>, adaptive
+        <a href="https://m3.material.io/components?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">components</a>, flexible
+        <a href="https://m3.material.io/styles/typography/overview?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">typography</a>, and contrasting
+        <a href="https://m3.material.io/styles/shape/overview-principles?utm_source=homepage&amp;utm_medium=referral&amp;utm_campaign=IO26">shapes</a>.
+      </p>
+      <div class="card-grid mixed-grid">
+        @for (card of expressiveIntroCards; track card.title) {
+          <a
+            class="material-card"
+            [class.large-card]="card.size === 'large'"
+            [class.small-card]="card.size === 'small'"
+            [href]="card.href"
+            [attr.aria-label]="card.title"
+            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
+            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
+          >
+            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
+            <div class="card-copy">
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="components-heading">
+      <h2 id="components-heading">Expressive components</h2>
+      <div class="card-grid mixed-grid component-grid">
+        @for (card of componentCards; track card.title) {
+          <a
+            class="material-card"
+            [class.large-card]="card.size === 'large'"
+            [class.compact-card]="card.size === 'compact'"
+            [href]="card.href"
+            [attr.aria-label]="card.title"
+            [attr.target]="isExternalLink(card.href) ? '_blank' : null"
+            [attr.rel]="isExternalLink(card.href) ? 'noopener' : null"
+          >
+            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
+            <div class="card-copy">
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="apply-heading">
+      <h2 id="apply-heading">How to apply M3 Expressive</h2>
+      <div class="card-grid two-column-grid">
+        @for (card of applyCards; track card.title) {
+          <a class="material-card large-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
+            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
+            <div class="card-copy">
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="latest-heading">
+      <h2 id="latest-heading">Latest in Material &amp; Google Design</h2>
+      <div class="card-grid two-column-grid">
+        @for (card of latestCards; track card.title) {
+          <a class="material-card large-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
+            <div class="card-media" [style.background-image]="'url(' + card.image + ')'" aria-hidden="true"></div>
+            <div class="card-copy">
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="content-section next-section" aria-labelledby="next-heading">
+      <h2 id="next-heading">Next steps</h2>
+      <div class="next-grid">
+        @for (card of nextCards; track card.title) {
+          <a class="next-card" [href]="card.href" [attr.aria-label]="card.title" [attr.target]="isExternalLink(card.href) ? '_blank' : null" [attr.rel]="isExternalLink(card.href) ? 'noopener' : null">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+          </a>
+        }
+      </div>
+    </section>
+  </article>
+</main>

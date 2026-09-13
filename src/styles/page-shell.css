@@ -1,0 +1,38 @@
+.page-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: #8c8c8c transparent;
+  scrollbar-width: auto;
+  background: var(--surface);
+  scroll-behavior: smooth;
+}
+
+.search-page-view {
+  display: none;
+}
+
+.app.search-page {
+  background: var(--surface-rail);
+}
+
+.app.search-page .page-content {
+  display: block;
+  background: var(--surface-rail);
+}
+
+.app.search-page .search-page-view {
+  display: block;
+  min-width: 0;
+  height: max(0px, calc(100vh - 96px));
+  flex: 0 0 max(0px, calc(100vh - 96px));
+  overflow: visible;
+  color: var(--on-surface);
+  background: var(--surface-rail);
+  font-size: 14px;
+  line-height: 20px;
+  scrollbar-color: #8c8c8c transparent;
+}
+

@@ -1,0 +1,85 @@
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+.app {
+  --surface: #fefbff;
+  --surface-container: #f8f1f6;
+  --surface-rail: #f2ecee;
+  --surface-container-high: #eee8ee;
+  --on-surface: #1c1b1d;
+  --on-surface-variant: #4d4256;
+  --outline: #7d747e;
+  --primary: #6442d6;
+  --on-primary: #fff;
+  --primary-container: #dcdaf5;
+  --search-container: #f1d3f9;
+  --link: #5f39e8;
+  --hover-container: #dcdaf5;
+  --hover-on-container: #21182b;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--on-surface);
+  background: var(--surface);
+}
+
+.app.dark {
+  --surface: #141314;
+  --surface-container: #1c1b1d;
+  --surface-rail: #211f21;
+  --surface-container-high: #2b292b;
+  --on-surface: #e6e1e3;
+  --on-surface-variant: #cbc4cc;
+  --outline: #978f99;
+  --primary: #9f86ff;
+  --on-primary: #1a0056;
+  --primary-container: #4d3d73;
+  --search-container: #553f5d;
+  --link: #9f86ff;
+  --hover-container: #454155;
+  --hover-on-container: #e6e1e3;
+}
+
+.mobile-bar,
+.drawer-layer {
+  display: none;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  overflow: hidden;
+  color: var(--on-surface);
+  background: var(--surface);
+}
+
+.skip-link:focus {
+  width: auto;
+  height: auto;
+  padding: 12px 18px;
+}
+
+.symbol {
+  display: inline-block;
+  font-family: 'Google Symbols';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.symbol.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+

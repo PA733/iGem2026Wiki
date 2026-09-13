@@ -1,0 +1,75 @@
+<section
+  [attr.id]="isSearchPage ? 'main_content' : 'search'"
+  class="search-page-view"
+  role="main"
+  aria-label="Main Content"
+  tabindex="-1"
+  aria-labelledby="search-page-heading"
+  [class.search-foundation-results]="searchSuggestionCategory === 'Foundations' && !!searchQuery"
+  [style.--search-result-height]="searchSuggestionHeight + 'px'"
+  [style.--search-group-gap]="searchGroupGap + 'px'"
+  [class.search-query-b]="searchQuery.trim().toLocaleLowerCase() === 'b'"
+>
+  <h1 id="search-page-heading" class="visually-hidden">Search Material Design</h1>
+  <div class="search-page-input-container">
+    <input
+      class="search-page-autocorrect"
+      type="text"
+      tabindex="-1"
+      aria-hidden="true"
+      disabled
+      [placeholder]="searchAutocorrect"
+    />
+    <input
+      #searchInput
+      class="search-page-input"
+      [class.autocomplete-active]="!!searchAutocorrect"
+      type="text"
+      maxlength="200"
+      autocomplete="off"
+      placeholder="Search"
+      aria-label="Search"
+      [value]="searchQuery"
+      (input)="updateSearch($event)"
+      (keydown)="onSearchKeydown($event)"
+    />
+    @if (searchQuery) {
+      <button class="search-clear" type="button" aria-label="clear search input" title="Clear search" (click)="clearSearch()">
+        <span class="symbol">close</span>
+      </button>
+    }
+  </div>
+  @if (visibleSearchSuggestions.length) {
+    <div class="search-suggestions" role="list" [style.height.px]="searchSuggestionHeight">
+      @for (group of visibleSearchGroups; track group.category; let groupIndex = $index) {
+        <div class="search-suggestion-group" [class.search-foundation-group]="groupIndex === 0 && group.category === 'Foundations'">
+          <div class="search-suggestion-title" [style.width.px]="searchSuggestionWidthFor(group.category)">{{ group.category }}</div>
+          <div class="search-suggestion-list" [style.width.px]="searchSuggestionWidthFor(group.category)">
+            @for (suggestion of group.suggestions; track $index) {
+              <div class="search-suggestion-item" role="listitem">
+                <a class="search-items" [href]="suggestion.href" [attr.aria-label]="'Navigate to ' + suggestion.title">
+                  <span class="search-items-text">
+                  @for (part of suggestionParts(suggestion.title); track $index) {
+                    @if (part.match) {
+                      <span class="highlight">{{ part.text }}</span>
+                    } @else {
+                      <span>{{ part.text }}</span>
+                    }
+                  }
+                  </span>
+                  <span class="symbol suggestion-arrow" aria-hidden="true">arrow_outward</span>
+                </a>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (searchQuery) {
+    <div class="search-suggestions search-empty" role="list" [style.height.px]="searchSuggestionHeight"></div>
+  } @else {
+    <div class="search-history" role="list">
+      @if (!searchQuery) { <span>Recent searches</span> }
+    </div>
+  }
+</section>
