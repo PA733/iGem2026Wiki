@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560" font-family="-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- ===================== Top row: Core pipeline ===================== -->
+  <!-- Box 1: dark blue -->
+  <rect x="120" y="140" width="210" height="84" rx="8" fill="#1a5490"/>
+  <text x="225" y="186" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">UGT mining</text>
+
+  <!-- Box 2: teal -->
+  <rect x="378" y="140" width="210" height="84" rx="8" fill="#0e8a7a"/>
+  <text x="483" y="172" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">Dual-glycoside</text>
+  <text x="483" y="200" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">production</text>
+
+  <!-- Box 3: light green -->
+  <rect x="636" y="140" width="210" height="84" rx="8" fill="#4caf50"/>
+  <text x="741" y="172" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">Ternary</text>
+  <text x="741" y="200" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">self-assembly</text>
+
+  <!-- Box 4: purple -->
+  <rect x="894" y="140" width="210" height="84" rx="8" fill="#7b3f9d"/>
+  <text x="999" y="186" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">4-layer dressing</text>
+
+  <!-- Box 5: red -->
+  <rect x="1152" y="140" width="210" height="84" rx="8" fill="#d64541"/>
+  <text x="1257" y="186" fill="#ffffff" font-size="20" font-weight="600" text-anchor="middle">Wound healing</text>
+
+  <!-- Horizontal arrows between top boxes -->
+  <line x1="334" y1="182" x2="370" y2="182" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="592" y1="182" x2="628" y2="182" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="850" y1="182" x2="886" y2="182" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="1108" y1="182" x2="1144" y2="182" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Left vertical label: Core pipeline -->
+  <text x="45" y="182" fill="#1a5490" font-size="18" font-weight="600" text-anchor="middle" transform="rotate(-90 45 182)">Core pipeline</text>
+
+  <!-- ===================== Downward arrows ===================== -->
+  <line x1="225" y1="224" x2="225" y2="372" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="483" y1="224" x2="483" y2="372" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="741" y1="224" x2="741" y2="372" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="999" y1="224" x2="999" y2="372" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="1257" y1="224" x2="1257" y2="372" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ===================== Bottom row: Multi-scale models ===================== -->
+  <!-- Box 1: dark blue outline -->
+  <rect x="120" y="380" width="210" height="84" rx="8" fill="#ffffff" stroke="#1a5490" stroke-width="2.5"/>
+  <text x="225" y="428" fill="#1a5490" font-size="22" font-weight="700" text-anchor="middle">MOLECULAR</text>
+
+  <!-- Box 2: teal outline -->
+  <rect x="378" y="380" width="210" height="84" rx="8" fill="#ffffff" stroke="#0e8a7a" stroke-width="2.5"/>
+  <text x="483" y="428" fill="#0e8a7a" font-size="22" font-weight="700" text-anchor="middle">CELLULAR</text>
+
+  <!-- Box 3: light green outline -->
+  <rect x="636" y="380" width="210" height="84" rx="8" fill="#ffffff" stroke="#4caf50" stroke-width="2.5"/>
+  <text x="741" y="428" fill="#4caf50" font-size="22" font-weight="700" text-anchor="middle">MESOSCALE</text>
+
+  <!-- Box 4: purple outline -->
+  <rect x="894" y="380" width="210" height="84" rx="8" fill="#ffffff" stroke="#7b3f9d" stroke-width="2.5"/>
+  <text x="999" y="428" fill="#7b3f9d" font-size="22" font-weight="700" text-anchor="middle">MATERIAL</text>
+
+  <!-- Box 5: red outline -->
+  <rect x="1152" y="380" width="210" height="84" rx="8" fill="#ffffff" stroke="#d64541" stroke-width="2.5"/>
+  <text x="1257" y="428" fill="#d64541" font-size="22" font-weight="700" text-anchor="middle">TISSUE</text>
+
+  <!-- Left vertical label: Multi-scale models -->
+  <text x="45" y="422" fill="#1a5490" font-size="18" font-weight="600" text-anchor="middle" transform="rotate(-90 45 422)">Multi-scale models</text>
+</svg>

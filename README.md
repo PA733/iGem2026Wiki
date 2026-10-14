@@ -1,6 +1,6 @@
 # LUT-CHINA Wiki
 
-以用户提供的 `LUT_CHINA WIKI.docx` 为内容来源，使用 Angular standalone 组件实现主页、6 个分类页、17 篇项目文章（85 个正文章节）与英文全文搜索。页面布局与交互参考 [Material Design 3 Get started](https://m3.material.io/get-started)。
+以用户提供的 `LUT_CHINA WIKI.docx` 为初始内容，并迁入 `docs/wiki_resources` 中的首页、建模、创业与团队资料。使用 Angular standalone 组件实现主页、6 个分类页、18 篇项目文章（120 个正文章节）与全文搜索。页面布局与交互参考 [Material Design 3 Get started](https://m3.material.io/get-started)，内容迁移沿用现有设计。
 
 ## 运行与构建
 
@@ -38,18 +38,22 @@ npm run deploy -- --dry-run
 
 | 栏目 | 路径 | 内容 |
 | --- | --- | --- |
-| Project | `/project` | 项目背景、四层敷料设计、实施路径、社区贡献 |
+| Project | `/project` | 项目背景、四层敷料设计、实施路径、社区贡献、创业 |
 | Wet lab | `/wet-lab` | 工程循环、细胞实验、元件、验证与结果规划 |
-| Dry lab | `/dry-lab` | 数学模型与辅助决策平台规划 |
+| Dry lab | `/dry-lab` | 五尺度模型、实验反馈、iGEM Project Evaluator |
 | Human Practices | `/human-practices` | 利益相关方、教育传播、合作规划 |
-| Team | `/team` | 团队组织、成果归属、工作时间线 |
+| Team | `/team` | 成员介绍、个人与团队照片、成果归属、工作时间线 |
 | Safety | `/safety` | 项目边界与生物安全规划 |
 
-文档中的设计和计划保持其原有状态；未填造实验结果、团队成员、元件编号或已完成合作。网站内容、导航说明、搜索提示与辅助功能标签统一使用英文。
+内容保留所提供文档的表述，包括实验状态、模型预测与局限。网站界面使用英文，成员中文姓名和参考资料原名按文档保留。
+
+`Home.docx` 对应首页；`Entrepreneurship.docx` 对应 `/project/entrepreneurship`；`Dry Lab & Modelling/index.html` 对应 `/dry-lab/model`，其中评估工具介绍同时用于 `/dry-lab/software`；`Team` 对应 `/team/members`。建模页保留全部 11 节、14 张图、公式、表格与参考文献，不引入源 HTML 的页面样式。
+
+网站媒体位于 `public/assets/wiki/`，原始资料仍保留在 `docs/wiki_resources`。67 个媒体文件由约 317.7 MiB 压缩至 11.4 MiB：照片按原比例缩至最长边不超过 1600 px，使用质量 88 的 WebP；模型 PNG 转为原分辨率的无损 WebP，SVG 原样保留。图片附带尺寸和替代文本，并延迟加载。
 
 ## 修改内容与样式
 
-- `src/app/content/wiki.data.ts`：统一的分类、文章、表格和段落数据；搜索与静态入口均从此生成。
+- `src/app/content/wiki.data.ts`：统一的分类、文章、表格和段落数据；导入的富文本使用 `contentHtml`，经 Angular HTML 清理后呈现；搜索与静态入口均从此生成。
 - `src/app/pages/home/`：首页文案、卡片、SVG 插图与暂停控制。
 - `src/app/pages/category/`：分类首屏、二级入口、固定插图与滚动淡入切换。
 - `src/app/pages/wiki-article/`：文章、分类标签、目录跟随、章节链接复制与深链接。

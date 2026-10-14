@@ -152,6 +152,9 @@
             <span class="wiki-section-copy-tooltip">{{ copiedSection === section.id ? 'Link copied' : copyFailedSection === section.id ? 'Copy failed' : 'Copy link' }}</span>
           </button>
           <h2 [id]="section.id + '-heading'">{{ section.heading }}</h2>
+          @if (section.contentHtml) {
+            <div class="wiki-resource-content" [innerHTML]="section.contentHtml"></div>
+          }
           @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
           @if (section.bullets?.length) {
             <ul class="wiki-article-bullets">@for (bullet of section.bullets; track $index) { <li>{{ bullet }}</li> }</ul>

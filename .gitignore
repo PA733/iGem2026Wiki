@@ -24,3 +24,6 @@
 # Python screenshot/check scripts
 __pycache__/
 *.pyc
+
+docs/wiki_resources
+

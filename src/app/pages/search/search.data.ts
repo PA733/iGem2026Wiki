@@ -1,6 +1,14 @@
 import { WIKI_ARTICLES, WIKI_CATEGORIES } from '../../content/wiki.data';
 import { SearchSuggestion } from './search.models';
 
+/** Resource HTML is generated locally with Unicode text and basic HTML entities. */
+function resourceText(html: string): string {
+  const entities: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', '#x27': "'", '#39': "'", nbsp: ' ' };
+  return html.replace(/<[^>]*>/g, ' ')
+    .replace(/&(amp|lt|gt|quot|#x27|#39|nbsp);/g, (_, entity: string) => entities[entity])
+    .replace(/\s+/g, ' ').trim();
+}
+
 /** Build the searchable content from the same data that renders the wiki. */
 export const SEARCH_SUGGESTIONS: SearchSuggestion[] = WIKI_CATEGORIES.flatMap((category) => [
   {
@@ -21,6 +29,7 @@ export const SEARCH_SUGGESTIONS: SearchSuggestion[] = WIKI_CATEGORIES.flatMap((c
     text: [article.description,
       ...article.sections.flatMap((section) => [
         section.heading,
+        resourceText(section.contentHtml ?? ''),
         ...section.paragraphs,
         ...(section.bullets ?? []),
         ...(section.table?.headers ?? []),

@@ -37,11 +37,13 @@ def main():
         driver.execute_async_script('document.fonts.ready.then(arguments[0])')
         time.sleep(.55)
         check(path + ' declares English', driver.execute_script('return document.documentElement.lang') == 'en')
-        check(path + ' has English content and accessible labels', driver.execute_script(r'''
+        check(path + ' has English navigation and controls', driver.execute_script(r'''
             const han = /[\u3400-\u9fff]/u;
-            const labels = [...document.querySelectorAll('[aria-label], [title], [placeholder], [alt]')]
+            // Imported biographies and references retain source-language names.
+            const chrome = [...document.querySelectorAll('.nav-rail, .mobile-bar, .site-footer')];
+            const labels = chrome.flatMap(root => [...root.querySelectorAll('[aria-label], [title], [placeholder], [alt]')])
                 .flatMap(el => ['aria-label', 'title', 'placeholder', 'alt'].map(attr => el.getAttribute(attr) || ''));
-            return !han.test(document.body.innerText + labels.join(' '));
+            return !han.test(chrome.map(el => el.innerText).join(' ') + labels.join(' '));
         '''))
 
     def capture(name):
@@ -121,7 +123,7 @@ def main():
             check(route + ' category renders', bool(driver.find_elements(By.CSS_SELECTOR, '.category-main')))
             article_routes.extend(driver.execute_script('return [...document.querySelectorAll(".category-section-links a")].map(a=>new URL(a.href).pathname)'))
         article_routes = sorted(set(article_routes))
-        check('All 17 article routes discoverable', len(article_routes) == 17)
+        check('All 18 article routes discoverable', len(article_routes) == 18)
         for route in article_routes:
             open_page(route)
             check(route + ' article renders', bool(driver.find_elements(By.CSS_SELECTOR, '.wiki-article')))

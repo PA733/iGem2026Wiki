@@ -401,6 +401,58 @@
 .wiki-article-bullets li { margin-top: 12px; padding-left: 4px; overflow-wrap: anywhere; }
 .wiki-article-bullets li::marker { color: var(--primary); }
 
+/* Imported content inherits the article design; source-document styles are omitted. */
+.wiki-resource-content { min-width: 0; }
+.wiki-resource-content > :first-child { margin-top: 0; }
+.wiki-resource-content h3 {
+  margin: 40px 0 16px;
+  font: 475 24px/1.4 'Google Sans', Arial, sans-serif;
+  overflow-wrap: anywhere;
+}
+.wiki-resource-content a { color: var(--link); overflow-wrap: anywhere; text-underline-offset: 3px; }
+.wiki-resource-content figure { min-width: 0; margin: 32px 0; }
+.wiki-resource-content figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+.wiki-resource-content figcaption {
+  margin-top: 12px;
+  color: var(--on-surface-variant);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.wiki-resource-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+  align-items: start;
+}
+.wiki-resource-gallery figure { margin: 0; }
+.wiki-resource-formula {
+  max-width: 100%;
+  margin-top: 24px;
+  padding: 24px;
+  overflow-x: auto;
+  border-radius: 20px;
+  background: var(--surface-container);
+  font-size: 16px;
+  line-height: 1.9;
+}
+.wiki-resource-formula > code { display: block; width: max-content; min-width: 100%; }
+.wiki-resource-formula > span { display: block; margin-top: 12px; }
+.wiki-resource-content .wiki-article-note { display: block; line-height: 1.9; }
+
+@media (max-width: 600px) {
+  .wiki-resource-content h3 { font-size: 21px; }
+  .wiki-resource-gallery { grid-template-columns: minmax(0, 1fr); }
+  .wiki-resource-content figure img, .wiki-resource-formula { border-radius: 16px; }
+  .wiki-resource-formula { padding: 20px; font-size: 14px; }
+}
+
 .wiki-section-copy {
   position: absolute;
   top: 0;

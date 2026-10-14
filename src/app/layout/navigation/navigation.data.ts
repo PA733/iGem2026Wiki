@@ -23,6 +23,7 @@ export const NAVIGATION_SUBMENUS: Record<string, MobileSubmenuItem[]> = {
       ],
     },
     { label: 'Contribution', href: '/project/contribution' },
+    { label: 'Entrepreneurship', href: '/project/entrepreneurship' },
   ],
   'Wet lab': [
     { label: 'Wet lab overview', href: '/wet-lab' },
