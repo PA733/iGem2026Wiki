@@ -147,13 +147,14 @@ export class NavigationComponent implements OnDestroy {
 
   onDesktopNavItemClick(event: Event, item: NavItem): void {
     if (this.isModifiedClick(event)) return;
-    if (item.expandable) this.openDesktopSubmenu(event, item);
+    // Category links point to their first page; let the app handle navigation.
+    if (item.expandable) this.closeDesktopSubmenu(false);
     else this.scrollHome(event);
   }
 
   onDesktopNavItemKeydown(event: KeyboardEvent, item: NavItem): void {
     if (!item.expandable) return;
-    if (['Enter', ' ', 'ArrowRight', 'ArrowDown'].includes(event.key)) {
+    if ([' ', 'ArrowRight', 'ArrowDown'].includes(event.key)) {
       this.openDesktopSubmenu(event, item);
       this.defer(() => document.querySelector<HTMLElement>('.desktop-topic-nav:not(.desktop-topic-nav-leave) .desktop-topic-item')?.focus(), 300);
     }
