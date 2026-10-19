@@ -1,7 +1,4 @@
 # LUT-CHINA Wiki
-
-以用户提供的 `LUT_CHINA WIKI.docx` 为初始内容，并迁入 `docs/wiki_resources` 中的首页、建模、创业与团队资料。使用 Angular standalone 组件实现主页、6 个分类页、18 篇项目文章（120 个正文章节）与全文搜索。页面布局与交互参考 [Material Design 3 Get started](https://m3.material.io/get-started)，内容迁移沿用现有设计。
-
 ## 运行与构建
 
 ```bash
@@ -10,7 +7,7 @@ npm start
 npm run build
 ```
 
-本地预览地址为 `http://localhost:4200/`。生产文件在 `dist/material-design-3-clone/browser/`。构建后会根据内容索引自动生成所有分类和文章的静态入口，支持直接访问和刷新；`/get-started` 也可进入项目概览。未知地址由应用显示 404 内容，静态服务器可将错误页配置为生成的 `404.html`。
+本地预览地址为 `http://localhost:4200/`。生产文件在 `dist/*/browser/`。构建后会根据内容索引自动生成所有分类和文章的静态入口，支持直接访问和刷新；`/get-started` 也可进入项目概览。未知地址由应用显示 404 内容，静态服务器可将错误页配置为生成的 `404.html`。
 
 ## 部署到 Cloudflare Pages
 
