@@ -1,0 +1,83 @@
+<section
+  [attr.id]="isSearchPage ? 'main_content' : 'search'"
+  class="search-page-view wiki-search"
+  role="main"
+  tabindex="-1"
+  aria-labelledby="search-page-heading"
+>
+  <h1 id="search-page-heading" class="visually-hidden">Search LUT-CHINA Wiki</h1>
+  <div class="search-page-input-container">
+    <input
+      #searchInput
+      class="search-page-input"
+      type="search"
+      maxlength="200"
+      autocomplete="off"
+      placeholder="Search LUT-CHINA"
+      aria-label="Search LUT-CHINA Wiki"
+      aria-describedby="search-help"
+      [value]="searchQuery"
+      (input)="updateSearch($event)"
+      (keydown)="onSearchKeydown($event)"
+    />
+    @if (searchQuery) {
+      <button class="search-clear" type="button" aria-label="Clear search" title="Clear search" (click)="clearSearch()">
+        <span class="symbol" aria-hidden="true">close</span>
+      </button>
+    }
+  </div>
+  <div class="wiki-search-content">
+    <p id="search-help" class="search-help">Explore project design, experimental plans and our team. Search by topic, molecule or research method.</p>
+    @if (hasQuery) {
+      <p class="search-result-count" role="status" aria-live="polite">{{ visibleSearchSuggestions.length }} matching {{ visibleSearchSuggestions.length === 1 ? 'page' : 'pages' }}</p>
+      @if (visibleSearchSuggestions.length) {
+        <div class="search-suggestions">
+          @for (group of visibleSearchGroups; track group.category) {
+            <section class="search-suggestion-group" [attr.aria-label]="group.category">
+              <h2 class="search-suggestion-title">{{ group.category }} <span>{{ group.suggestions.length }}</span></h2>
+              <ul class="search-suggestion-list">
+                @for (suggestion of group.suggestions; track suggestion.href) {
+                  <li class="search-suggestion-item">
+                    <a #searchResult class="search-items" [href]="(suggestion.href) | siteUrl" (keydown)="onResultKeydown($event)">
+                      <span class="search-item-content">
+                        <span class="search-items-text">
+                          @for (part of suggestionParts(suggestion.title); track $index) {
+                            <span [class.highlight]="part.match">{{ part.text }}</span>
+                          }
+                        </span>
+                        <span class="search-item-subtitle">{{ suggestion.subtitle }}</span>
+                        <span class="search-item-snippet">
+                          @for (part of suggestionParts(suggestion.snippet); track $index) {
+                            <span [class.highlight]="part.match">{{ part.text }}</span>
+                          }
+                        </span>
+                      </span>
+                      <span class="symbol suggestion-arrow" aria-hidden="true">arrow_outward</span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </section>
+          }
+        </div>
+      } @else {
+        <div class="search-empty">
+          <span class="symbol search-empty-icon" aria-hidden="true">search_off</span>
+          <h2>No matching pages</h2>
+          <p>Try a shorter keyword, or search for lobetyolin, dressing or Human Practices.</p>
+        </div>
+      }
+    } @else {
+      <div class="search-history">
+        <h2>Start exploring</h2>
+        <div class="search-query-chips">
+          @for (query of suggestedQueries; track query) {
+            <button type="button" (click)="useSuggestedQuery(query)">
+              <span class="symbol" aria-hidden="true">search</span>{{ query }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

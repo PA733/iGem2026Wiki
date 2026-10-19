@@ -1,0 +1,29 @@
+# Dependencies
+/node_modules
+
+# Angular build output
+/dist
+/.angular
+
+# Cloudflare local login, logs and deployment state
+/.cloudflare/
+/.wrangler/
+
+# IDE and OS files
+/.idea
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/launch.json
+!/.vscode/tasks.json
+.DS_Store
+
+# Logs and coverage
+*.log
+/coverage
+
+# Python screenshot/check scripts
+__pycache__/
+*.pyc
+
+docs/wiki_resources
+

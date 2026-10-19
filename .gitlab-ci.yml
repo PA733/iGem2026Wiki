@@ -1,0 +1,26 @@
+image: node:22.21.1-bookworm-slim
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run build -- --base-href /lut-china/
+    # Angular's source assets already occupy public; replace it with build output.
+    - rm -rf public
+    - mv dist/igem-2026-lut/browser public
+    - test -f public/index.html
+    - test -f public/project/design/index.html
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

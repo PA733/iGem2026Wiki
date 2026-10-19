@@ -1,0 +1,197 @@
+<ng-template #brandMark>
+  <svg class="lut-brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7V2Z" fill="currentColor" />
+    <circle cx="12" cy="12" r="2.25" class="lut-brand-mark-center" />
+  </svg>
+</ng-template>
+
+<header class="mobile-bar" role="banner">
+  <button class="mobile-bar-button" type="button" aria-label="Open navigation" title="Open navigation"
+    aria-controls="mobile-navigation" [attr.aria-expanded]="isMobileMenuOpen" (click)="toggleMobileMenu()">
+    <span class="symbol" aria-hidden="true">menu</span>
+  </button>
+  <a class="mobile-brand" [href]="('/') | siteUrl" aria-label="LUT-CHINA homepage" (click)="scrollHome($event)">
+    <ng-container [ngTemplateOutlet]="brandMark"></ng-container><span>LUT-CHINA</span>
+  </a>
+  <a class="mobile-bar-button" [href]="('/search.html') | siteUrl" aria-label="Search the wiki" title="Search"
+    [attr.aria-current]="isSearchPage ? 'page' : null" (click)="openSearch($event)">
+    <span class="symbol" aria-hidden="true">search</span>
+  </a>
+</header>
+
+<aside class="nav-rail" aria-label="Primary navigation" (mouseenter)="cancelDesktopSubmenuClose()" (mouseleave)="scheduleDesktopSubmenuClose()">
+  <a class="search-fab" [href]="('/search.html') | siteUrl" aria-label="Search the wiki" title="Search"
+    [attr.aria-current]="isSearchPage ? 'page' : null" (click)="openSearch($event)">
+    <span class="symbol" aria-hidden="true">search</span>
+  </a>
+  <nav class="nav-items" aria-label="Main">
+    @for (item of navItems; track item.id) {
+      <a class="nav-item" [class.active]="isNavItemActive(item)" [href]="(item.href) | siteUrl"
+        [attr.aria-controls]="item.expandable ? 'desktop-navigation' : null"
+        [attr.aria-expanded]="item.expandable ? (desktopPanelOpen && desktopMenuSection === item.label) : null"
+        [attr.aria-current]="isNavItemActive(item) ? 'true' : null" [attr.aria-label]="item.label"
+        (click)="onDesktopNavItemClick($event, item)"
+        (mouseenter)="item.expandable ? openDesktopSubmenuOnHover(item, $event) : closeDesktopSubmenu(false)"
+        (focus)="onDesktopNavItemFocus($event, item)" (keydown)="onDesktopNavItemKeydown($event, item)">
+        <span class="nav-icon-wrap">
+          @if (item.id === 'home') {
+            <ng-container [ngTemplateOutlet]="brandMark"></ng-container>
+          } @else {
+            <span class="symbol" aria-hidden="true" [class.filled]="isNavItemActive(item)">{{ item.icon }}</span>
+          }
+        </span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+  <div class="rail-controls">
+    <button type="button" class="rail-control" role="switch" [attr.aria-checked]="!animationsPaused"
+      [attr.aria-label]="animationsPaused ? 'Play animations' : 'Pause animations'"
+      [title]="animationsPaused ? 'Play animations' : 'Pause animations'" (click)="toggleAnimations()">
+      <span class="rail-control-track" aria-hidden="true">
+        <span class="rail-control-icon"><span class="symbol">play_arrow</span></span>
+        <span class="rail-control-icon"><span class="symbol">pause</span></span>
+      </span>
+    </button>
+    <button type="button" class="rail-control" role="switch" [attr.aria-checked]="isDark"
+      [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+      [title]="isDark ? 'Switch to light mode' : 'Switch to dark mode'" (click)="toggleTheme()">
+      <span class="rail-control-track" aria-hidden="true">
+        <span class="rail-control-icon"><span class="symbol">dark_mode</span></span>
+        <span class="rail-control-icon"><span class="symbol">light_mode</span></span>
+      </span>
+    </button>
+  </div>
+</aside>
+
+@if (desktopMenuSection; as section) {
+  <aside class="desktop-topic-drawer" [class.desktop-topic-drawer-open]="desktopPanelOpen"
+    [class.desktop-topic-content-transition]="desktopContentTransition"
+    [attr.aria-label]="section + ' navigation'" [attr.aria-hidden]="desktopPanelOpen ? null : 'true'"
+    [attr.inert]="desktopPanelOpen ? null : ''"
+    (mouseenter)="cancelDesktopSubmenuClose()" (mouseleave)="scheduleDesktopSubmenuClose()">
+    @for (sectionName of [section]; track sectionName) {
+    <nav id="desktop-navigation" class="desktop-topic-nav" animate.leave="desktop-topic-nav-leave" [attr.aria-label]="sectionName + ' pages'">
+      <ng-container [ngTemplateOutlet]="desktopTopicTree"
+        [ngTemplateOutletContext]="{ $implicit: mobileSubmenus[sectionName], depth: 0, visible: desktopPanelOpen }"></ng-container>
+    </nav>
+    }
+  </aside>
+}
+
+<ng-template #desktopTopicTree let-items let-depth="depth" let-visible="visible">
+  @for (entry of items; track entry.href; let first = $first) {
+    <div class="desktop-topic-group" [class.desktop-topic-group-first]="depth === 0 && first"
+      [class.desktop-topic-group-depth-1]="depth === 1" [class.desktop-topic-group-depth-2]="depth === 2"
+      [class.desktop-topic-group-expandable]="!!entry.children?.length">
+      @if (entry.children?.length) {
+        <button class="desktop-topic-item desktop-topic-toggle" type="button" [attr.tabindex]="visible ? 0 : -1"
+          [attr.aria-label]="entry.label" [attr.aria-expanded]="isDesktopSubmenuItemExpanded(entry)"
+          (click)="toggleDesktopSubmenuItem($event, entry)">
+          <span>{{ entry.label }}</span>
+          <span class="symbol desktop-topic-arrow" [class.topic-arrow-expanded]="isDesktopSubmenuItemExpanded(entry)" aria-hidden="true">arrow_drop_down</span>
+        </button>
+      } @else {
+        <a class="desktop-topic-item" [class.active]="isTopicActive(entry)" [attr.tabindex]="visible ? 0 : -1"
+          [attr.aria-current]="isTopicActive(entry) ? 'page' : null" [href]="(entry.href) | siteUrl"
+          [attr.aria-label]="entry.label" (click)="onDesktopSubmenuLeafClick($event)"><span>{{ entry.label }}</span></a>
+      }
+      @if (entry.children?.length) {
+        <div class="desktop-topic-children" [class.desktop-topic-children-open]="isDesktopSubmenuItemExpanded(entry)"
+          [attr.inert]="isDesktopSubmenuItemExpanded(entry) ? null : ''"
+          [attr.aria-hidden]="isDesktopSubmenuItemExpanded(entry) ? null : 'true'">
+          <div class="desktop-topic-children-inner">
+            <ng-container [ngTemplateOutlet]="desktopTopicTree"
+              [ngTemplateOutletContext]="{ $implicit: entry.children, depth: depth + 1, visible: visible && isDesktopSubmenuItemExpanded(entry) }"></ng-container>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</ng-template>
+
+@if (isMobileMenuMounted) {
+  <div class="drawer-layer" [class.drawer-layer-open]="isMobileMenuOpen" [class.drawer-content-transition]="mobileContentTransition" role="dialog" aria-modal="true"
+    aria-label="LUT-CHINA navigation" [attr.inert]="isMobileMenuOpen ? null : ''" [attr.aria-hidden]="isMobileMenuOpen ? null : 'true'">
+    <button class="drawer-scrim" type="button" tabindex="-1" aria-label="Close navigation" (click)="closeMobileMenu()"></button>
+    <div class="drawer-header">
+        <button class="mobile-bar-button" type="button" aria-label="Close navigation" title="Close navigation" (click)="closeMobileMenu()">
+          <span class="symbol" aria-hidden="true">{{ isMobileMenuOpen ? 'menu_open' : 'menu' }}</span>
+        </button>
+        <a class="mobile-brand" [href]="('/') | siteUrl" aria-label="LUT-CHINA homepage" (click)="scrollHome($event)">
+          <ng-container [ngTemplateOutlet]="brandMark"></ng-container><span>LUT-CHINA</span>
+        </a>
+    </div>
+    <aside id="mobile-navigation" class="mobile-drawer" aria-label="Navigation drawer">
+      @if (mobileMenuSection; as section) {
+        <div class="drawer-submenu" animate.leave="drawer-submenu-leave" [attr.aria-label]="section + ' navigation'">
+          <button class="drawer-back" type="button" aria-label="Back to main menu" (click)="closeMobileSubmenu()">
+            <span class="symbol" aria-hidden="true">arrow_back</span><span>Main menu</span>
+          </button>
+          <nav class="drawer-nav drawer-submenu-nav" [attr.aria-label]="section + ' pages'">
+            <ng-container [ngTemplateOutlet]="mobileTopicTree"
+              [ngTemplateOutletContext]="{ $implicit: mobileSubmenus[section], visible: true }"></ng-container>
+          </nav>
+        </div>
+      } @else {
+        <nav class="drawer-nav drawer-main-nav" animate.leave="drawer-main-leave" aria-label="Main">
+          @for (item of navItems; track item.id) {
+            <a class="drawer-item" [class.active]="isNavItemActive(item)" [href]="(item.href) | siteUrl"
+              [attr.aria-current]="isNavItemActive(item) ? 'true' : null"
+              [attr.aria-expanded]="item.expandable ? false : null" [attr.aria-label]="item.label"
+              (click)="onDrawerItemClick($event, item)" (keydown)="onDrawerItemKeydown($event, item)">
+              @if (item.id === 'home') {
+                <ng-container [ngTemplateOutlet]="brandMark"></ng-container>
+              } @else {
+                <span class="symbol" aria-hidden="true" [class.filled]="isNavItemActive(item)">{{ item.icon }}</span>
+              }
+              <span>{{ item.label }}</span>
+              @if (item.expandable) { <span class="symbol drawer-arrow" aria-hidden="true">arrow_forward</span> }
+            </a>
+          }
+        </nav>
+      }
+      <div class="drawer-controls">
+        <button type="button" role="switch" [attr.aria-checked]="!animationsPaused"
+          [attr.aria-label]="animationsPaused ? 'Play animations' : 'Pause animations'" (click)="toggleAnimations()">
+          <span class="symbol" aria-hidden="true">{{ animationsPaused ? 'play_arrow' : 'pause' }}</span>
+          <span>{{ animationsPaused ? 'Play animations' : 'Pause animations' }}</span>
+        </button>
+        <button type="button" role="switch" [attr.aria-checked]="isDark"
+          [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'" (click)="toggleTheme()">
+          <span class="symbol" aria-hidden="true">{{ isDark ? 'light_mode' : 'dark_mode' }}</span>
+          <span>{{ isDark ? 'Switch to light mode' : 'Switch to dark mode' }}</span>
+        </button>
+      </div>
+    </aside>
+    <a class="drawer-search-through" [href]="('/search.html') | siteUrl" aria-label="Search the wiki" title="Search" (click)="openSearch($event)">
+      <span class="symbol" aria-hidden="true">search</span>
+    </a>
+  </div>
+}
+
+<ng-template #mobileTopicTree let-items let-visible="visible">
+  @for (entry of items; track entry.href) {
+    <div class="drawer-topic-group">
+      @if (entry.children?.length) {
+        <button class="drawer-item drawer-subitem" type="button" [attr.tabindex]="visible ? 0 : -1"
+          [attr.aria-expanded]="isMobileSubmenuItemExpanded(entry)" (click)="openMobileSubmenuItem($event, entry)">
+          <span>{{ entry.label }}</span>
+          <span class="symbol drawer-arrow" [class.topic-arrow-expanded]="isMobileSubmenuItemExpanded(entry)" aria-hidden="true">arrow_drop_down</span>
+        </button>
+        <div class="drawer-topic-children" [class.drawer-topic-children-open]="isMobileSubmenuItemExpanded(entry)"
+          [attr.inert]="isMobileSubmenuItemExpanded(entry) ? null : ''"
+          [attr.aria-hidden]="isMobileSubmenuItemExpanded(entry) ? null : 'true'">
+          <div class="drawer-topic-children-inner">
+            <ng-container [ngTemplateOutlet]="mobileTopicTree"
+              [ngTemplateOutletContext]="{ $implicit: entry.children, visible: visible && isMobileSubmenuItemExpanded(entry) }"></ng-container>
+          </div>
+        </div>
+      } @else {
+        <a class="drawer-item drawer-subitem" [class.active]="isTopicActive(entry)" [href]="(entry.href) | siteUrl"
+          [attr.tabindex]="visible ? 0 : -1" [attr.aria-current]="isTopicActive(entry) ? 'page' : null"
+          (click)="openMobileSubmenuItem($event, entry)"><span>{{ entry.label }}</span></a>
+      }
+    </div>
+  }
+</ng-template>

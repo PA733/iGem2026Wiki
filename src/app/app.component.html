@@ -1,0 +1,23 @@
+<div class="app" [class.dark]="isDark" [class.motion-paused]="animationsPaused" [class.search-page]="isSearchPage" [class.search-results-active]="isSearchPage && hasSearchResults" [class.wiki-reader]="!!article" [class.category-page]="!!category" (click)="onInternalLink($event)">
+  <a class="skip-link" href="#main_content" (click)="skipToTarget($event)">Skip to main content</a>
+  <app-navigation [isSearchPage]="isSearchPage" [isArticlePage]="!!article" [activeCategory]="activeCategory" [isDark]="isDark" [animationsPaused]="animationsPaused" (searchRequested)="openSearch($event)" (homeRequested)="scrollHome($event)" (themeToggled)="toggleTheme()" (animationsToggled)="toggleAnimations()" />
+  <div #pageContent class="page-content page-content-height" (scroll)="onPageContentScroll()">
+    <div class="page-body">
+        @if (isSearchPage) {
+          <app-search-page [isSearchPage]="true" (resultsChanged)="hasSearchResults = $event" />
+        } @else if (article) {
+          <app-wiki-article [article]="article" [scrollContainer]="pageContent" [relatedArticles]="relatedArticles" [animationsPaused]="animationsPaused" (tabNavigated)="navigate($event, true)" />
+        } @else if (category) {
+          <app-category-page [category]="category" [articles]="relatedArticles" [scrollContainer]="pageContent" [animationsPaused]="animationsPaused" />
+        } @else if (notFound) {
+          <main id="main_content" class="not-found" tabindex="-1">
+            <span class="symbol" aria-hidden="true">explore_off</span><p>404</p><h1>Page not found</h1><p>This page could not be found. Continue exploring the LUT-CHINA project.</p>
+            <a class="get-started" [href]="('/project') | siteUrl">Explore the project</a>
+          </main>
+        } @else {
+          <app-home-page [isSearchPage]="false" [isArticlePage]="false" [animationsPaused]="animationsPaused" />
+        }
+      <app-footer (homeRequested)="scrollHome($event)" />
+    </div>
+  </div>
+</div>

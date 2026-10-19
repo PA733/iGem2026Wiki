@@ -1,0 +1,43 @@
+<footer class="site-footer">
+  <div class="wave" aria-hidden="true"></div>
+  <div class="footer-content">
+    <div class="footer-about">
+      <a class="footer-project-mark" [href]="('/') | siteUrl" aria-label="LUT-CHINA home" (click)="homeRequested.emit($event)">
+        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7V2Z" fill="currentColor"/><circle cx="12" cy="12" r="2.25" style="fill: var(--surface)"/></svg>
+        <span>LUT-CHINA</span>
+      </a>
+      <p>From an active molecule to a functional dressing. LUT-CHINA brings together synthetic biology, materials engineering and human practices to investigate inflammation and the microenvironment of diabetic foot wounds.</p>
+    </div>
+    <div class="footer-column">
+      <h3>Discover</h3>
+      <a [href]="('/project') | siteUrl">Our project</a>
+      <a [href]="('/project/design') | siteUrl">Dressing design</a>
+      <a [href]="('/project/implementation') | siteUrl">Application</a>
+      <a [href]="('/project/contribution') | siteUrl">Contribution</a>
+    </div>
+    <div class="footer-column">
+      <h3>Research</h3>
+      <a [href]="('/wet-lab') | siteUrl">Wet lab</a>
+      <a [href]="('/dry-lab') | siteUrl">Dry lab</a>
+      <a [href]="('/wet-lab/results') | siteUrl">Results</a>
+      <a [href]="('/safety/biosafety') | siteUrl">Biosafety</a>
+    </div>
+    <div class="footer-column footer-more">
+      <h3>Connect</h3>
+      <a [href]="('/human-practices') | siteUrl">Human practices</a>
+      <a [href]="('/team/members') | siteUrl">Our team</a>
+      <a [href]="('/team/attributions') | siteUrl">Attributions</a>
+      <a href="https://igem.org/" target="_blank" rel="noopener noreferrer">iGEM <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="footer-legal">
+      <a class="footer-wordmark" [href]="('/') | siteUrl" (click)="homeRequested.emit($event)">LUT-CHINA</a>
+      <div class="legal-links">
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+        <a href="https://gitlab.igem.org/2026/lut-china" target="_blank" rel="noopener noreferrer">Wiki source</a>
+        <a [href]="('/team/notebook') | siteUrl">Notebook</a>
+        <a [href]="('/human-practices/education') | siteUrl">Education</a>
+        <a [href]="('/human-practices/collaborations') | siteUrl">Collaborations</a>
+      </div>
+    </div>
+  </div>
+</footer>
