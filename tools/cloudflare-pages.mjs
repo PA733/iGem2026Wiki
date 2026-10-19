@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const account = '59a01eefabdbc9ef0ebadf236bbf3081';
 const project = 'igem2026';
-const output = 'dist/material-design-3-clone/browser';
+const output = 'dist/igem-2026-lut/browser';
 const state = join(root, '.cloudflare');
 const [action = 'deploy', ...flags] = process.argv.slice(2);
 const dryRun = flags.includes('--dry-run');

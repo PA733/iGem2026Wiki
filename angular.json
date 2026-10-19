@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "material-design-3-clone": {
+    "igem-2026-lut": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "material-design-3-clone:build:production"
+              "buildTarget": "igem-2026-lut:build:production"
             },
             "development": {
-              "buildTarget": "material-design-3-clone:build:development"
+              "buildTarget": "igem-2026-lut:build:development"
             }
           },
           "defaultConfiguration": "development"

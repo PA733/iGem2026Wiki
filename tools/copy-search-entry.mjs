@@ -7,8 +7,8 @@ import ts from 'typescript';
 // navigation/search, so a newly added article also works after a direct reload.
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputCandidates = [
-  resolve(projectRoot, 'dist/material-design-3-clone/browser'),
-  resolve(projectRoot, 'dist/material-design-3-clone'),
+  resolve(projectRoot, 'dist/igem-2026-lut/browser'),
+  resolve(projectRoot, 'dist/igem-2026-lut'),
 ];
 const browserOutput = outputCandidates.find(directory => existsSync(join(directory, 'index.html')));
 if (!browserOutput) throw new Error('Angular index.html was not found in the build output.');
